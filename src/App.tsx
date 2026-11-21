@@ -31,6 +31,7 @@ const STORAGE_REQUESTS_KEY = 'winnal9a_sfax_requests_v3';
 const STORAGE_REVIEWS_KEY = 'winnal9a_sfax_reviews_v2';
 const STORAGE_FAVORITES_KEY = 'winnal9a_sfax_favorites_v1';
 const STORAGE_RECENT_SEARCHES_KEY = 'winnal9a_sfax_recent_searches_v1';
+const STORAGE_THEME_KEY = 'winnal9a_sfax_theme_v1';
 
 const DARIJA_STOPWORDS = new Set([
   'نحب',
@@ -135,6 +136,13 @@ export default function App() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [drawerTab, setDrawerTab] = useState<SideDrawerTab>('requests');
   const [toasts, setToasts] = useState<ToastNotification[]>([]);
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(STORAGE_THEME_KEY) === 'dark';
+    } catch {
+      return false;
+    }
+  });
 
   const requestsRef = useRef<BookingRequest[]>(requests);
   const acceptanceTimersRef = useRef<Record<string, number>>({});
@@ -198,6 +206,15 @@ export default function App() {
       // Ignore storage quota errors cleanly
     }
   }, [recentSearches]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDark);
+    try {
+      localStorage.setItem(STORAGE_THEME_KEY, isDark ? 'dark' : 'light');
+    } catch {
+      // Ignore storage quota errors cleanly
+    }
+  }, [isDark]);
 
   const allServices = useMemo(() => {
     const baseList = [...customServices, ...INITIAL_SERVICES];
@@ -543,12 +560,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-marketplace-canvas text-slate-900 overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-marketplace-canvas text-slate-900 dark:text-slate-100 overflow-x-hidden transition-colors duration-200">
       <AnnouncementBanner />
 
       <Header
         requestsCount={requests.length}
         favoritesCount={favoriteServices.length}
+        isDark={isDark}
+        onToggleDarkMode={() => setIsDark((prev) => !prev)}
         onOpenRequests={() => openDrawer('requests')}
         onOpenFavorites={() => openDrawer('favorites')}
         onJumpToAddService={handleJumpToAddService}
@@ -577,25 +596,25 @@ export default function App() {
         >
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="space-y-1">
-              <p className="text-xs font-semibold text-[#0F766E]">
+              <p className="text-xs font-semibold text-[#0F766E] dark:text-[#2DD4BF]">
                 حرفيون ومختصون ثقة
               </p>
-              <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A]">
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A] dark:text-white">
                 دليل الخدمات الموجودة في صفاقس
               </h2>
-              <p className="text-sm text-slate-600 tabular-nums">
+              <p className="text-sm text-slate-600 dark:text-slate-400 tabular-nums">
                 يعرض {filteredServices.length} من جملة {allServices.length} خدمة
                 موثوقة
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
-              <label className="flex items-center gap-2 text-xs text-slate-600">
+              <label className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
                 <span>الجهة:</span>
                 <select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
-                  className="h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 shadow-2xs focus:outline-none focus:border-[#0D9488] cursor-pointer"
+                  className="h-10 px-3 bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-200 shadow-2xs focus:outline-none focus:border-[#0D9488] cursor-pointer"
                 >
                   {SFAX_AREAS.map((area) => (
                     <option key={area} value={area}>
@@ -605,12 +624,12 @@ export default function App() {
                 </select>
               </label>
 
-              <label className="flex items-center gap-2 text-xs text-slate-600">
+              <label className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
                 <span>رتّب حسب:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 shadow-2xs focus:outline-none focus:border-[#0D9488] cursor-pointer"
+                  className="h-10 px-3 bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-medium text-slate-800 dark:text-slate-200 shadow-2xs focus:outline-none focus:border-[#0D9488] cursor-pointer"
                 >
                   <option value="rating">الأعلى تقييم</option>
                   <option value="price-asc">الأرخص سوم</option>
@@ -638,14 +657,14 @@ export default function App() {
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-4 py-2.5 min-h-[42px] text-sm font-medium rounded-xl border inline-flex items-center gap-2 transition-all whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] ${
                     isActive
-                      ? 'bg-[#0F2547] text-white border-[#0F2547] shadow-sm'
-                      : 'bg-white text-slate-700 border-slate-200/90 hover:border-slate-300 hover:text-[#0F2547] shadow-2xs'
+                      ? 'bg-[#0F2547] dark:bg-[#0F766E] text-white border-[#0F2547] dark:border-[#0F766E] shadow-sm'
+                      : 'bg-white dark:bg-[#111C30] text-slate-700 dark:text-slate-300 border-slate-200/90 dark:border-slate-700/80 hover:border-slate-300 dark:hover:border-slate-600 hover:text-[#0F2547] dark:hover:text-white shadow-2xs'
                   }`}
                 >
                   <CategoryIcon
                     category={cat.id}
                     className={`w-4 h-4 shrink-0 ${
-                      isActive ? 'text-[#2DD4BF]' : 'text-[#0F766E]'
+                      isActive ? 'text-[#2DD4BF]' : 'text-[#0F766E] dark:text-[#2DD4BF]'
                     }`}
                   />
                   <span>{cat.label}</span>
@@ -657,17 +676,17 @@ export default function App() {
           {/* Services Grid */}
           {filteredServices.length === 0 ? (
             <div className="card-premium rounded-2xl p-12 text-center space-y-3">
-              <p className="text-base font-semibold text-slate-900">
+              <p className="text-base font-semibold text-slate-900 dark:text-white">
                 ما لقيناش خدمات تطابق البحث متاعك توا
               </p>
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-slate-500 dark:text-slate-400">
                 جرّب بدّل الكلمات اللي كتبتها ولا اختار &laquo;مناطق صفاقس
                 الكل&raquo; باش يطلعولك أكثر مزودين.
               </p>
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="mt-2 px-5 py-2.5 min-h-[44px] bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer"
+                className="mt-2 px-5 py-2.5 min-h-[44px] bg-[#0F2547] hover:bg-[#173666] dark:bg-[#0F766E] dark:hover:bg-[#0D9488] text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer"
               >
                 رجّع البحث من جديد
               </button>
@@ -691,7 +710,7 @@ export default function App() {
         <FaqSection />
 
         {/* Monthly Completed Requests Statistics (Recharts) */}
-        <MonthlyStatsSection requests={requests} />
+        <MonthlyStatsSection requests={requests} isDark={isDark} />
 
         {/* Dedicated Payment Hub & Quick Settlement Section */}
         <PaymentSection

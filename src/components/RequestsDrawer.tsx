@@ -50,7 +50,7 @@ interface RatingFormProps {
 function RequestStatusBadge({ status }: { status: BookingRequest['status'] }) {
   if (status === 'كملت الخدمة') {
     return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#0F2547] text-white border border-[#0F2547] shadow-[0_4px_14px_-4px_rgba(15,37,71,0.45)]">
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#0F2547] dark:bg-[#162844] text-white border border-[#0F2547] dark:border-slate-600 shadow-[0_4px_14px_-4px_rgba(15,37,71,0.45)]">
         <CheckCircle2 className="w-3.5 h-3.5 text-[#2DD4BF] shrink-0" aria-hidden="true" />
         <span>{status}</span>
       </span>
@@ -59,10 +59,10 @@ function RequestStatusBadge({ status }: { status: BookingRequest['status'] }) {
 
   if (status === 'تأكّد الموعد') {
     return (
-      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-teal-50/95 text-[#0F766E] border border-teal-200/90 shadow-[0_0_16px_-3px_rgba(13,148,136,0.38)]">
+      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-teal-50/95 dark:bg-teal-950/70 text-[#0F766E] dark:text-[#2DD4BF] border border-teal-200/90 dark:border-teal-700/70 shadow-[0_0_16px_-3px_rgba(13,148,136,0.38)]">
         <span className="relative flex w-2 h-2 shrink-0" aria-hidden="true">
           <span className="animate-status-beacon absolute inset-0 rounded-full bg-[#0D9488]" />
-          <span className="relative inline-flex rounded-full w-2 h-2 bg-[#0F766E]" />
+          <span className="relative inline-flex rounded-full w-2 h-2 bg-[#0F766E] dark:bg-[#2DD4BF]" />
         </span>
         <CalendarCheck2 className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
         <span>{status}</span>
@@ -71,7 +71,7 @@ function RequestStatusBadge({ status }: { status: BookingRequest['status'] }) {
   }
 
   return (
-    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-50/95 text-amber-800 border border-amber-200/90 shadow-[0_0_14px_-3px_rgba(245,158,11,0.35)]">
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-amber-50/95 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border border-amber-200/90 dark:border-amber-700/60 shadow-[0_0_14px_-3px_rgba(245,158,11,0.35)]">
       <span className="relative flex w-2 h-2 shrink-0" aria-hidden="true">
         <span className="animate-status-beacon absolute inset-0 rounded-full bg-amber-400" />
         <span className="relative inline-flex rounded-full w-2 h-2 bg-amber-500" />
@@ -109,13 +109,13 @@ function RequestRatingForm({ requestId, onSubmitReview }: RatingFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="mt-3 pt-3 border-t border-slate-200 space-y-3"
+      className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 space-y-3"
     >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-semibold text-[#0F172A]">
+        <span className="text-xs font-semibold text-[#0F172A] dark:text-white">
           قيّم الخدمة بعد ما كملت
         </span>
-        <span className="text-xs font-bold text-[#0F766E] tabular-nums">
+        <span className="text-xs font-bold text-[#0F766E] dark:text-[#2DD4BF] tabular-nums">
           {activeStars} / 5
         </span>
       </div>
@@ -137,13 +137,13 @@ function RequestRatingForm({ requestId, onSubmitReview }: RatingFormProps) {
               onClick={() => setRating(starValue)}
               onMouseEnter={() => setHoverRating(starValue)}
               onMouseLeave={() => setHoverRating(0)}
-              className="p-1.5 rounded-lg hover:bg-amber-50 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+              className="p-1.5 rounded-lg hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
             >
               <Star
                 className={`w-5 h-5 transition-colors ${
                   filled
                     ? 'text-amber-500 fill-amber-500'
-                    : 'text-slate-300 fill-transparent'
+                    : 'text-slate-300 dark:text-slate-600 fill-transparent'
                 }`}
               />
             </button>
@@ -152,7 +152,7 @@ function RequestRatingForm({ requestId, onSubmitReview }: RatingFormProps) {
       </div>
 
       {errorMsg && (
-        <p role="alert" className="text-xs text-red-700 font-medium">
+        <p role="alert" className="text-xs text-red-700 dark:text-red-400 font-medium">
           {errorMsg}
         </p>
       )}
@@ -162,12 +162,12 @@ function RequestRatingForm({ requestId, onSubmitReview }: RatingFormProps) {
         value={comment}
         onChange={(e) => setComment(e.target.value)}
         placeholder="اكتب رأيك باختصار على جودة الخدمة والالتزام بالوقت (اختياري)..."
-        className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#0D9488] resize-none"
+        className="w-full p-2.5 bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-[#0D9488] resize-none"
       />
 
       <button
         type="submit"
-        className="w-full py-2 min-h-[40px] px-3 bg-[#0F2547] hover:bg-[#173666] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+        className="w-full py-2 min-h-[40px] px-3 bg-[#0F2547] hover:bg-[#173666] dark:bg-[#0F766E] dark:hover:bg-[#0D9488] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
       >
         ابعث التقييم
       </button>
@@ -205,15 +205,15 @@ export function RequestsDrawer({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="bg-white w-full max-w-md h-full border-r border-slate-200 flex flex-col justify-between shadow-2xl">
+      <div className="bg-white dark:bg-[#111C30] w-full max-w-md h-full border-r border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-2xl transition-colors">
         {/* Drawer Header & Tab Switcher */}
-        <div className="border-b border-slate-200">
+        <div className="border-b border-slate-200 dark:border-slate-800">
           <div className="px-6 py-4 flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-bold text-[#0F172A]">
+              <h2 className="text-lg font-bold text-[#0F172A] dark:text-white">
                 {isFavoritesTab ? 'الخدمات المفضلة' : 'طلباتي المسجلة'}
               </h2>
-              <p className="text-xs text-slate-500 tabular-nums">
+              <p className="text-xs text-slate-500 dark:text-slate-400 tabular-nums">
                 {isFavoritesTab
                   ? favoriteServices.length === 0
                     ? 'ما فما حتى خدمة محفوظة توا'
@@ -227,7 +227,7 @@ export function RequestsDrawer({
               type="button"
               onClick={onClose}
               aria-label="سكّر القائمة الجانبية"
-              className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+              className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -245,8 +245,8 @@ export function RequestsDrawer({
               onClick={() => onTabChange('requests')}
               className={`h-10 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-colors cursor-pointer ${
                 !isFavoritesTab
-                  ? 'bg-[#0F2547] text-white border-[#0F2547] shadow-xs'
-                  : 'bg-[#F8FAFC] text-slate-600 border-slate-200 hover:text-[#0F2547]'
+                  ? 'bg-[#0F2547] dark:bg-[#0F766E] text-white border-[#0F2547] dark:border-[#0F766E] shadow-xs'
+                  : 'bg-[#F8FAFC] dark:bg-[#0B1426] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:text-[#0F2547] dark:hover:text-white'
               }`}
             >
               <ClipboardList className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -260,8 +260,8 @@ export function RequestsDrawer({
               onClick={() => onTabChange('favorites')}
               className={`h-10 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-colors cursor-pointer ${
                 isFavoritesTab
-                  ? 'bg-[#0F2547] text-white border-[#0F2547] shadow-xs'
-                  : 'bg-[#F8FAFC] text-slate-600 border-slate-200 hover:text-[#0F2547]'
+                  ? 'bg-[#0F2547] dark:bg-[#0F766E] text-white border-[#0F2547] dark:border-[#0F766E] shadow-xs'
+                  : 'bg-[#F8FAFC] dark:bg-[#0B1426] text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:text-[#0F2547] dark:hover:text-white'
               }`}
             >
               <Heart
@@ -284,32 +284,32 @@ export function RequestsDrawer({
           {isFavoritesTab ? (
             favoriteServices.length === 0 ? (
               <div className="text-center py-16 space-y-3">
-                <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center mx-auto text-rose-500">
+                <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/50 border border-rose-100 dark:border-rose-800/60 flex items-center justify-center mx-auto text-rose-500 dark:text-rose-400">
                   <Heart className="w-6 h-6" aria-hidden="true" />
                 </div>
-                <p className="text-sm font-medium text-slate-800">
+                <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
                   مازال ما حفظت حتى خدمة في المفضلة
                 </p>
-                <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">
+                <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">
                   كي تعجبك خدمة في الدليل، انزل على زر القلب باش تتحفظ هنا وترجعلها
                   في أي وقت تحب تحجزها.
                 </p>
                 <button
                   type="button"
                   onClick={onClose}
-                  className="mt-2 px-5 py-2.5 min-h-[42px] bg-[#0F2547] text-white text-xs font-semibold rounded-xl hover:bg-[#173666] transition-colors cursor-pointer"
+                  className="mt-2 px-5 py-2.5 min-h-[42px] bg-[#0F2547] dark:bg-[#0F766E] text-white text-xs font-semibold rounded-xl hover:bg-[#173666] dark:hover:bg-[#0D9488] transition-colors cursor-pointer"
                 >
                   تصفّح الخدمات
                 </button>
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between text-xs text-slate-500">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                   <span>محفوظة أوتوماتيكياً على متصفّحك</span>
                   <button
                     type="button"
                     onClick={onClearFavorites}
-                    className="text-rose-600 hover:text-rose-700 font-semibold cursor-pointer"
+                    className="text-rose-600 dark:text-rose-400 hover:text-rose-700 dark:hover:text-rose-300 font-semibold cursor-pointer"
                   >
                     فرّغ الكل
                   </button>
@@ -318,19 +318,19 @@ export function RequestsDrawer({
                 {favoriteServices.map((service) => (
                   <div
                     key={service.id}
-                    className="p-4 bg-[#F8FAFC] border border-slate-200 rounded-xl space-y-3"
+                    className="p-4 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700/80 rounded-xl space-y-3"
                   >
                     <div className="flex items-start gap-3">
                       <img
                         src={service.imageUrl}
                         alt={service.title}
                         referrerPolicy="no-referrer"
-                        className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200 bg-slate-100"
+                        className="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800"
                       />
 
                       <div className="flex-1 min-w-0 space-y-1">
-                        <div className="flex items-center gap-1.5 text-[11px] text-slate-500">
-                          <span className="inline-flex items-center gap-1 font-semibold text-[#0F766E]">
+                        <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
+                          <span className="inline-flex items-center gap-1 font-semibold text-[#0F766E] dark:text-[#2DD4BF]">
                             <CategoryIcon
                               category={service.category}
                               className="w-3 h-3 shrink-0"
@@ -341,15 +341,15 @@ export function RequestsDrawer({
                           <span className="truncate">{service.city}</span>
                         </div>
 
-                        <h3 className="text-sm font-bold text-[#0F172A] leading-snug line-clamp-2">
+                        <h3 className="text-sm font-bold text-[#0F172A] dark:text-white leading-snug line-clamp-2">
                           {service.title}
                         </h3>
 
-                        <div className="flex items-center gap-2 text-xs text-slate-600">
+                        <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300">
                           <span className="inline-flex items-center gap-1 truncate">
                             {service.verified && (
                               <ShieldCheck
-                                className="w-3.5 h-3.5 text-[#0D9488] shrink-0"
+                                className="w-3.5 h-3.5 text-[#0D9488] dark:text-[#2DD4BF] shrink-0"
                                 aria-hidden="true"
                               />
                             )}
@@ -357,10 +357,10 @@ export function RequestsDrawer({
                               {service.providerName}
                             </span>
                           </span>
-                          <span aria-hidden="true" className="text-slate-300">
+                          <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">
                             ·
                           </span>
-                          <span className="inline-flex items-center gap-0.5 tabular-nums shrink-0 font-semibold text-[#0F172A]">
+                          <span className="inline-flex items-center gap-0.5 tabular-nums shrink-0 font-semibold text-[#0F172A] dark:text-white">
                             <Star
                               className="w-3 h-3 text-amber-500 fill-amber-500"
                               aria-hidden="true"
@@ -375,7 +375,7 @@ export function RequestsDrawer({
                         onClick={() => onToggleFavorite(service.id)}
                         aria-label={`نحّي ${service.title} من المفضلة`}
                         title="نحّي من المفضلة"
-                        className="p-2 text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                        className="p-2 text-rose-500 hover:text-rose-700 dark:hover:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/50 rounded-lg transition-colors cursor-pointer shrink-0"
                       >
                         <Heart
                           className="w-4 h-4 fill-rose-500"
@@ -384,12 +384,12 @@ export function RequestsDrawer({
                       </button>
                     </div>
 
-                    <div className="pt-2.5 border-t border-slate-200 flex items-center justify-between gap-3">
+                    <div className="pt-2.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3">
                       <div className="tabular-nums">
-                        <span className="text-[11px] text-slate-500 block">
+                        <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
                           يبدأ من
                         </span>
-                        <span className="text-sm font-bold text-[#0F172A]">
+                        <span className="text-sm font-bold text-[#0F172A] dark:text-white">
                           {service.priceFrom} {service.priceUnit}
                         </span>
                       </div>
@@ -400,7 +400,7 @@ export function RequestsDrawer({
                           onClose();
                           onSelectService(service.id);
                         }}
-                        className="px-4 py-2 min-h-[38px] bg-[#0F2547] hover:bg-[#173666] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                        className="px-4 py-2 min-h-[38px] bg-[#0F2547] hover:bg-[#173666] dark:bg-[#0F766E] dark:hover:bg-[#0D9488] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
                       >
                         التفاصيل والحجز
                       </button>
@@ -411,17 +411,17 @@ export function RequestsDrawer({
             )
           ) : requests.length === 0 ? (
             <div className="text-center py-16 space-y-3">
-              <p className="text-sm font-medium text-slate-800">
+              <p className="text-sm font-medium text-slate-800 dark:text-slate-200">
                 مازال ما حجزت حتى خدمة
               </p>
-              <p className="text-xs text-slate-500 max-w-xs mx-auto leading-relaxed">
+              <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto leading-relaxed">
                 اختار الخدمة اللي حاجتك بيها من الدليل وابعث الطلب باش يطلعلك
                 هنا بنومرو المتابعة وحالة الخلاص والتقييم.
               </p>
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-2 px-5 py-2.5 min-h-[42px] bg-[#0F2547] text-white text-xs font-semibold rounded-xl hover:bg-[#173666] transition-colors cursor-pointer"
+                className="mt-2 px-5 py-2.5 min-h-[42px] bg-[#0F2547] dark:bg-[#0F766E] text-white text-xs font-semibold rounded-xl hover:bg-[#173666] dark:hover:bg-[#0D9488] transition-colors cursor-pointer"
               >
                 شوف الخدمات
               </button>
@@ -434,23 +434,23 @@ export function RequestsDrawer({
               return (
                 <div
                   key={req.id}
-                  className="p-4 bg-[#F8FAFC] border border-slate-200 rounded-xl space-y-3"
+                  className="p-4 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700/80 rounded-xl space-y-3"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="space-y-1.5 min-w-0">
                       <div className="flex items-center flex-wrap gap-2 text-xs">
                         <span
                           dir="ltr"
-                          className="font-mono-num font-semibold text-[#0F766E]"
+                          className="font-mono-num font-semibold text-[#0F766E] dark:text-[#2DD4BF]"
                         >
                           #{req.referenceCode}
                         </span>
                         <RequestStatusBadge status={req.status} />
                       </div>
-                      <h3 className="text-sm font-bold text-[#0F172A]">
+                      <h3 className="text-sm font-bold text-[#0F172A] dark:text-white">
                         {req.serviceTitle}
                       </h3>
-                      <p className="text-xs text-slate-600">
+                      <p className="text-xs text-slate-600 dark:text-slate-400">
                         {req.providerName} · {req.city}
                       </p>
                     </div>
@@ -459,7 +459,7 @@ export function RequestsDrawer({
                       type="button"
                       onClick={() => onRemoveRequest(req.id)}
                       aria-label="لغّي الطلب"
-                      className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0"
+                      className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition-colors cursor-pointer shrink-0"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -478,7 +478,7 @@ export function RequestsDrawer({
                             : 'bg-[#0D9488]'
                         }`}
                       />
-                      <span className="block text-[10px] font-medium text-slate-500">
+                      <span className="block text-[10px] font-medium text-slate-500 dark:text-slate-400">
                         في المراجعة
                       </span>
                     </div>
@@ -487,14 +487,14 @@ export function RequestsDrawer({
                         className={`h-1 rounded-full transition-colors ${
                           isAccepted || isCompleted
                             ? 'bg-[#0D9488] shadow-[0_0_8px_rgba(13,148,136,0.45)]'
-                            : 'bg-slate-200'
+                            : 'bg-slate-200 dark:bg-slate-700'
                         }`}
                       />
                       <span
                         className={`block text-[10px] font-medium ${
                           isAccepted || isCompleted
-                            ? 'text-[#0F766E]'
-                            : 'text-slate-400'
+                            ? 'text-[#0F766E] dark:text-[#2DD4BF]'
+                            : 'text-slate-400 dark:text-slate-500'
                         }`}
                       >
                         تأكّد الموعد
@@ -504,13 +504,15 @@ export function RequestsDrawer({
                       <div
                         className={`h-1 rounded-full transition-colors ${
                           isCompleted
-                            ? 'bg-[#0F2547] shadow-[0_0_8px_rgba(15,37,71,0.4)]'
-                            : 'bg-slate-200'
+                            ? 'bg-[#0F2547] dark:bg-[#2DD4BF] shadow-[0_0_8px_rgba(15,37,71,0.4)]'
+                            : 'bg-slate-200 dark:bg-slate-700'
                         }`}
                       />
                       <span
                         className={`block text-[10px] font-medium ${
-                          isCompleted ? 'text-[#0F2547]' : 'text-slate-400'
+                          isCompleted
+                            ? 'text-[#0F2547] dark:text-white'
+                            : 'text-slate-400 dark:text-slate-500'
                         }`}
                       >
                         كملت
@@ -518,27 +520,27 @@ export function RequestsDrawer({
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-slate-200 space-y-2 text-xs text-slate-600">
+                  <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2 text-xs text-slate-600 dark:text-slate-300">
                     <div className="flex items-center justify-between">
                       <span className="inline-flex items-center gap-1 tabular-nums">
                         <Calendar className="w-3.5 h-3.5 text-slate-400" />
                         {req.preferredDate}
                       </span>
-                      <span className="font-semibold text-[#0F172A] tabular-nums">
+                      <span className="font-semibold text-[#0F172A] dark:text-white tabular-nums">
                         {req.priceFrom} د.ت
                       </span>
                     </div>
 
                     <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-1 font-medium text-slate-700">
+                      <span className="inline-flex items-center gap-1 font-medium text-slate-700 dark:text-slate-300">
                         <CreditCard className="w-3.5 h-3.5 text-slate-400" />
                         {req.paymentMethodLabel}
                       </span>
                       <span
                         className={`inline-flex items-center gap-1 font-semibold ${
                           req.paymentStatus === 'تخلّصت أونلاين'
-                            ? 'text-[#0F766E]'
-                            : 'text-[#0F2547]'
+                            ? 'text-[#0F766E] dark:text-[#2DD4BF]'
+                            : 'text-[#0F2547] dark:text-slate-200'
                         }`}
                       >
                         <CheckCircle2 className="w-3.5 h-3.5" />
@@ -552,7 +554,7 @@ export function RequestsDrawer({
                         <button
                           type="button"
                           onClick={() => onAcceptRequest(req.id)}
-                          className="flex-1 py-2 min-h-[40px] px-3 bg-teal-50 border border-teal-200 hover:bg-teal-100/80 text-[#0F766E] font-semibold rounded-xl transition-colors cursor-pointer"
+                          className="flex-1 py-2 min-h-[40px] px-3 bg-teal-50 dark:bg-teal-950/50 border border-teal-200 dark:border-teal-700/60 hover:bg-teal-100/80 dark:hover:bg-teal-900/60 text-[#0F766E] dark:text-[#2DD4BF] font-semibold rounded-xl transition-colors cursor-pointer"
                         >
                           قبول من المزود
                         </button>
@@ -565,7 +567,7 @@ export function RequestsDrawer({
                             onClose();
                             onJumpToPayment();
                           }}
-                          className="flex-1 py-2 min-h-[40px] px-3 bg-white border border-slate-200 hover:border-[#0D9488] hover:text-[#0F766E] text-[#0F2547] font-semibold rounded-xl transition-colors cursor-pointer"
+                          className="flex-1 py-2 min-h-[40px] px-3 bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 hover:border-[#0D9488] dark:hover:border-[#2DD4BF] hover:text-[#0F766E] dark:hover:text-[#2DD4BF] text-[#0F2547] dark:text-slate-200 font-semibold rounded-xl transition-colors cursor-pointer"
                         >
                           خلّص أونلاين توا
                         </button>
@@ -592,9 +594,9 @@ export function RequestsDrawer({
                   )}
 
                   {isCompleted && req.userRating && (
-                    <div className="mt-3 pt-3 border-t border-slate-200 bg-white rounded-xl p-3 border border-slate-200/80 space-y-1.5">
+                    <div className="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111C30] rounded-xl p-3 border border-slate-200/80 dark:border-slate-700 space-y-1.5">
                       <div className="flex items-center justify-between text-xs">
-                        <span className="font-semibold text-[#0F766E]">
+                        <span className="font-semibold text-[#0F766E] dark:text-[#2DD4BF]">
                           تقييمك المسجّل
                         </span>
                         <div className="flex items-center gap-1">
@@ -604,14 +606,14 @@ export function RequestsDrawer({
                               className={`w-3.5 h-3.5 ${
                                 star <= (req.userRating || 0)
                                   ? 'text-amber-500 fill-amber-500'
-                                  : 'text-slate-300'
+                                  : 'text-slate-300 dark:text-slate-600'
                               }`}
                             />
                           ))}
                         </div>
                       </div>
                       {req.userReview && (
-                        <p className="text-xs text-slate-700 leading-relaxed">
+                        <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                           {req.userReview}
                         </p>
                       )}
@@ -623,11 +625,11 @@ export function RequestsDrawer({
           )}
         </div>
 
-        <div className="p-4 border-t border-slate-200 bg-[#F8FAFC]">
+        <div className="p-4 border-t border-slate-200 dark:border-slate-800 bg-[#F8FAFC] dark:bg-[#0B1426]">
           <button
             type="button"
             onClick={onClose}
-            className="w-full py-2.5 min-h-[44px] bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 text-sm font-medium rounded-xl transition-colors cursor-pointer"
+            className="w-full py-2.5 min-h-[44px] bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 text-sm font-medium rounded-xl transition-colors cursor-pointer"
           >
             كمّل التصفح
           </button>

@@ -114,7 +114,7 @@ export function PaymentSection({
       id="payment"
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10"
     >
-      <div className="relative overflow-hidden bg-gradient-to-br from-[#091526] via-[#0F2547] to-[#113356] bg-navy-mesh text-white rounded-3xl border border-[#1E3A5F]/60 shadow-[0_20px_50px_-12px_rgba(15,37,71,0.28)] p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+      <div className="relative overflow-hidden bg-gradient-to-br from-[#091526] via-[#0F2547] to-[#113356] bg-navy-mesh text-white rounded-3xl border border-[#1E3A5F]/60 dark:border-slate-700/70 shadow-[0_20px_50px_-12px_rgba(15,37,71,0.28)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.6)] p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         {/* Soft Ambient Turquoise & Deep Blue Glows */}
         <div
           aria-hidden="true"
@@ -195,17 +195,17 @@ export function PaymentSection({
         </div>
 
         {/* Left/End: Interactive Quick Payment Settlement Box */}
-        <div className="relative z-10 lg:col-span-6 bg-white text-slate-900 rounded-2xl border border-slate-200/90 shadow-lg p-6 space-y-5">
-          <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-200">
+        <div className="relative z-10 lg:col-span-6 bg-white dark:bg-[#111C30] text-slate-900 dark:text-slate-100 rounded-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-lg p-6 space-y-5 transition-colors">
+          <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-200 dark:border-slate-800">
             <div>
-              <h3 className="text-lg font-bold text-[#0F172A]">
+              <h3 className="text-lg font-bold text-[#0F172A] dark:text-white">
                 بوابة الخلاص السريع لحجوزاتك
               </h3>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 خلّص سوم أي خدمة حجزتها ولا فاتورة متفاهمين عليها بنومرو المرجع
               </p>
             </div>
-            <div className="w-9 h-9 rounded-lg bg-[#F8FAFC] border border-slate-200 flex items-center justify-center text-[#0F766E] shrink-0">
+            <div className="w-9 h-9 rounded-lg bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[#0F766E] dark:text-[#2DD4BF] shrink-0">
               <Lock className="w-4 h-4" aria-hidden="true" />
             </div>
           </div>
@@ -213,42 +213,42 @@ export function PaymentSection({
           {receipt ? (
             <div className="py-3 space-y-4">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-6 h-6 text-[#0D9488] shrink-0 mt-0.5" />
+                <CheckCircle2 className="w-6 h-6 text-[#0D9488] dark:text-[#2DD4BF] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-base font-bold text-slate-900">
+                  <h4 className="text-base font-bold text-slate-900 dark:text-white">
                     تعدّى الخلاص بنجاح
                   </h4>
-                  <p className="text-sm text-slate-600 mt-0.5">
+                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-0.5">
                     العملية تسجّلت وتبدّلت حالة الحجز متاعك أوتوماتيكياً.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-[#F8FAFC] border border-slate-200 rounded-xl p-4 space-y-2 text-sm">
+              <div className="bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700/80 rounded-xl p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">نومرو وصل الخلاص</span>
+                  <span className="text-slate-500 dark:text-slate-400">نومرو وصل الخلاص</span>
                   <span
                     dir="ltr"
-                    className="font-mono-num font-semibold text-[#0F766E]"
+                    className="font-mono-num font-semibold text-[#0F766E] dark:text-[#2DD4BF]"
                   >
                     {receipt.paymentRef}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">مرجع الحجز</span>
-                  <span dir="ltr" className="font-mono-num text-slate-900">
+                  <span className="text-slate-500 dark:text-slate-400">مرجع الحجز</span>
+                  <span dir="ltr" className="font-mono-num text-slate-900 dark:text-white">
                     #{receipt.bookingRef}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">طريقة الخلاص</span>
-                  <span className="text-slate-900">{receipt.methodLabel}</span>
+                  <span className="text-slate-500 dark:text-slate-400">طريقة الخلاص</span>
+                  <span className="text-slate-900 dark:text-white">{receipt.methodLabel}</span>
                 </div>
-                <div className="flex justify-between border-t border-slate-200 pt-2">
-                  <span className="font-semibold text-slate-900">
+                <div className="flex justify-between border-t border-slate-200 dark:border-slate-700 pt-2">
+                  <span className="font-semibold text-slate-900 dark:text-white">
                     المبلغ اللي تخلّص
                   </span>
-                  <span className="font-bold text-slate-900 tabular-nums">
+                  <span className="font-bold text-slate-900 dark:text-white tabular-nums">
                     {receipt.amount} د.ت
                   </span>
                 </div>
@@ -257,7 +257,7 @@ export function PaymentSection({
               <button
                 type="button"
                 onClick={() => setReceipt(null)}
-                className="w-full py-2.5 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer"
+                className="w-full py-2.5 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] dark:bg-[#0F766E] dark:hover:bg-[#0D9488] text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer"
               >
                 اعمل عملية خلاص أخرى
               </button>
@@ -267,7 +267,7 @@ export function PaymentSection({
               {errorMsg && (
                 <p
                   role="alert"
-                  className="text-xs font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg p-3"
+                  className="text-xs font-medium text-red-700 dark:text-red-300 bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-800/70 rounded-lg p-3"
                 >
                   {errorMsg}
                 </p>
@@ -275,13 +275,13 @@ export function PaymentSection({
 
               {unpaidRequests.length > 0 && (
                 <label className="block space-y-1.5">
-                  <span className="text-xs font-medium text-slate-700">
+                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
                     اختار من طلباتك اللي مازالت ما تخلّصتش (اختياري)
                   </span>
                   <select
                     value={selectedRef}
                     onChange={(e) => handleSelectRequest(e.target.value)}
-                    className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-800 focus:bg-white focus:outline-none focus:border-[#0D9488]"
+                    className="w-full h-11 px-3 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-800 dark:text-white focus:bg-white dark:focus:bg-[#0B1426] focus:outline-none focus:border-[#0D9488]"
                   >
                     <option value="">-- اكتب نومرو المرجع بيدك --</option>
                     {unpaidRequests.map((req) => (
@@ -296,7 +296,7 @@ export function PaymentSection({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <label className="block space-y-1.5">
-                  <span className="text-xs font-medium text-slate-700">
+                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
                     مرجع الحجز
                   </span>
                   <input
@@ -309,12 +309,12 @@ export function PaymentSection({
                       setSelectedRef('');
                     }}
                     placeholder="WN-4820"
-                    className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 text-right font-mono-num focus:bg-white focus:outline-none focus:border-[#0D9488]"
+                    className="w-full h-11 px-3 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-right font-mono-num focus:bg-white dark:focus:bg-[#0B1426] focus:outline-none focus:border-[#0D9488]"
                   />
                 </label>
 
                 <label className="block space-y-1.5">
-                  <span className="text-xs font-medium text-slate-700">
+                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
                     المبلغ (د.ت)
                   </span>
                   <input
@@ -323,27 +323,27 @@ export function PaymentSection({
                     required
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
-                    className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 tabular-nums focus:bg-white focus:outline-none focus:border-[#0D9488]"
+                    className="w-full h-11 px-3 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white tabular-nums focus:bg-white dark:focus:bg-[#0B1426] focus:outline-none focus:border-[#0D9488]"
                   />
                 </label>
               </div>
 
               {/* Segmented Electronic Method Switch */}
               <div className="space-y-1.5">
-                <span className="block text-xs font-medium text-slate-700">
+                <span className="block text-xs font-medium text-slate-700 dark:text-slate-300">
                   كيفاش تحب تخلّص أونلاين؟
                 </span>
-                <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
+                <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-[#0B1426] rounded-xl">
                   <button
                     type="button"
                     onClick={() => setMethod('d17')}
                     className={`py-2.5 px-3 min-h-[40px] text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap ${
                       method === 'd17'
-                        ? 'bg-white text-[#0F2547] shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-white dark:bg-[#172844] text-[#0F2547] dark:text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
-                    <Smartphone className="w-3.5 h-3.5 text-[#0F766E]" aria-hidden="true" />
+                    <Smartphone className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#2DD4BF]" aria-hidden="true" />
                     <span>D17 / Flouci</span>
                   </button>
                   <button
@@ -351,11 +351,11 @@ export function PaymentSection({
                     onClick={() => setMethod('card')}
                     className={`py-2.5 px-3 min-h-[40px] text-xs font-semibold rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap ${
                       method === 'card'
-                        ? 'bg-white text-[#0F2547] shadow-sm'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-white dark:bg-[#172844] text-[#0F2547] dark:text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
-                    <CreditCard className="w-3.5 h-3.5 text-[#0F766E]" aria-hidden="true" />
+                    <CreditCard className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#2DD4BF]" aria-hidden="true" />
                     <span>كارطة بنكية</span>
                   </button>
                 </div>
@@ -363,7 +363,7 @@ export function PaymentSection({
 
               {method === 'd17' ? (
                 <label className="block space-y-1.5">
-                  <span className="text-xs font-medium text-slate-700">
+                  <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
                     نومرو التليفون المربوط بـ D17 / Flouci
                   </span>
                   <input
@@ -373,13 +373,13 @@ export function PaymentSection({
                     value={walletPhone}
                     onChange={(e) => setWalletPhone(e.target.value)}
                     placeholder="20 123 456"
-                    className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 text-right tabular-nums focus:bg-white focus:outline-none focus:border-[#0D9488]"
+                    className="w-full h-11 px-3 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-right tabular-nums focus:bg-white dark:focus:bg-[#0B1426] focus:outline-none focus:border-[#0D9488]"
                   />
                 </label>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label className="block space-y-1.5">
-                    <span className="text-xs font-medium text-slate-700">
+                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
                       اسم مولى الكارطة
                     </span>
                     <input
@@ -388,11 +388,11 @@ export function PaymentSection({
                       value={cardHolder}
                       onChange={(e) => setCardHolder(e.target.value)}
                       placeholder="الاسم كيما في الكارطة"
-                      className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0D9488]"
+                      className="w-full h-11 px-3 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-[#0B1426] focus:outline-none focus:border-[#0D9488]"
                     />
                   </label>
                   <label className="block space-y-1.5">
-                    <span className="text-xs font-medium text-slate-700">
+                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
                       نومرو الكارطة البنكية
                     </span>
                     <input
@@ -402,22 +402,22 @@ export function PaymentSection({
                       value={cardNumber}
                       onChange={(e) => setCardNumber(e.target.value)}
                       placeholder="4532 8900 1234 5678"
-                      className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 text-right font-mono-num focus:bg-white focus:outline-none focus:border-[#0D9488]"
+                      className="w-full h-11 px-3 bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 text-right font-mono-num focus:bg-white dark:focus:bg-[#0B1426] focus:outline-none focus:border-[#0D9488]"
                     />
                   </label>
                 </div>
               )}
 
-              <div className="pt-1 flex items-center justify-between text-xs text-slate-500">
+              <div className="pt-1 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
                 <span>عمولة المنصة على الحريف: 0 د.ت</span>
-                <span className="font-semibold text-[#0F172A] tabular-nums">
+                <span className="font-semibold text-[#0F172A] dark:text-white tabular-nums">
                   المجموع: {Number(amount) > 0 ? amount : 0} د.ت
                 </span>
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0D9488]"
+                className="w-full py-3 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] dark:bg-[#0F766E] dark:hover:bg-[#0D9488] text-white text-sm font-semibold rounded-xl shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0D9488]"
               >
                 أكّد الخلاص أونلاين
               </button>

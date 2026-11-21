@@ -3,7 +3,8 @@ interface BrandLogoProps {
 }
 
 export function BrandLogo({ variant = 'light' }: BrandLogoProps) {
-  const textColor = variant === 'dark' ? 'text-white' : 'text-[#0F2547]';
+  const textColor =
+    variant === 'dark' ? 'text-white' : 'text-[#0F2547] dark:text-white';
 
   return (
     <span
@@ -17,7 +18,7 @@ export function BrandLogo({ variant = 'light' }: BrandLogoProps) {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
-        className="shrink-0"
+        className="shrink-0 rounded-lg ring-1 ring-transparent dark:ring-white/15"
       >
         <rect width="32" height="32" rx="8" fill="#0F2547" />
         <path

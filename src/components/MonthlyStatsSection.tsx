@@ -15,6 +15,7 @@ import { BookingRequest } from '../types/service';
 
 interface MonthlyStatsSectionProps {
   requests: BookingRequest[];
+  isDark?: boolean;
 }
 
 interface MonthlyPoint {
@@ -82,9 +83,17 @@ function StatsTooltip({ active, payload, label }: CustomTooltipProps) {
   );
 }
 
-export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
+export function MonthlyStatsSection({
+  requests,
+  isDark = false,
+}: MonthlyStatsSectionProps) {
   const [chartType, setChartType] = useState<'area' | 'bar'>('area');
   const [range, setRange] = useState<'6m' | 'all'>('all');
+
+  const primarySeriesColor = isDark ? '#38BDF8' : '#0F2547';
+  const secondarySeriesColor = isDark ? '#2DD4BF' : '#0D9488';
+  const gridColor = isDark ? '#1E293B' : '#E2E8F0';
+  const axisTickColor = isDark ? '#94A3B8' : '#475569';
 
   const userCompletedCount = useMemo(
     () => requests.filter((r) => r.status === 'كملت الخدمة').length,
@@ -129,13 +138,13 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
         {/* Section Header + Controls */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-1.5">
-            <p className="text-xs font-semibold text-[#0F766E]">
+            <p className="text-xs font-semibold text-[#0F766E] dark:text-[#2DD4BF]">
               أرقام النشاط والثقة في صفاقس
             </p>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A] dark:text-white">
               الطلبات اللي كملت كل شهر في المنصة
             </h2>
-            <p className="text-sm text-slate-600 max-w-2xl">
+            <p className="text-sm text-slate-600 dark:text-slate-300 max-w-2xl">
               متابعة شهرية لتطور عدد الخدمات اللي كملت في ولاية صفاقس ونسبة
               الالتزام بالمواعيد المتفق عليها.
             </p>
@@ -143,14 +152,14 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
 
           <div className="flex flex-wrap items-center gap-3">
             {/* Time Range Segmented Control */}
-            <div className="inline-flex items-center p-1 bg-slate-100 rounded-xl">
+            <div className="inline-flex items-center p-1 bg-slate-100 dark:bg-[#0B1426] border border-transparent dark:border-slate-800 rounded-xl">
               <button
                 type="button"
                 onClick={() => setRange('6m')}
                 className={`px-3 py-1.5 min-h-[36px] text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
                   range === '6m'
-                    ? 'bg-white text-[#0F2547] shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-[#16233B] text-[#0F2547] dark:text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 آخر 6 شهور
@@ -160,8 +169,8 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                 onClick={() => setRange('all')}
                 className={`px-3 py-1.5 min-h-[36px] text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
                   range === 'all'
-                    ? 'bg-white text-[#0F2547] shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-white dark:bg-[#16233B] text-[#0F2547] dark:text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 العام الكل
@@ -169,14 +178,14 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
             </div>
 
             {/* Chart Type Segmented Control */}
-            <div className="inline-flex items-center p-1 bg-slate-100 rounded-xl">
+            <div className="inline-flex items-center p-1 bg-slate-100 dark:bg-[#0B1426] border border-transparent dark:border-slate-800 rounded-xl">
               <button
                 type="button"
                 onClick={() => setChartType('area')}
                 className={`px-3 py-1.5 min-h-[36px] text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
                   chartType === 'area'
-                    ? 'bg-[#0F2547] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-[#0F2547] dark:bg-[#0F766E] text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 منحنى تطوّر
@@ -186,8 +195,8 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                 onClick={() => setChartType('bar')}
                 className={`px-3 py-1.5 min-h-[36px] text-xs font-semibold rounded-lg transition-colors cursor-pointer whitespace-nowrap ${
                   chartType === 'bar'
-                    ? 'bg-[#0F2547] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
+                    ? 'bg-[#0F2547] dark:bg-[#0F766E] text-white shadow-xs'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
                 أعمدة بيانية
@@ -198,40 +207,46 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
 
         {/* 3-Column KPI Summary Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#0F2547] shrink-0">
+          <div className="p-4 rounded-2xl bg-[#F8FAFC] dark:bg-[#0B1426]/90 border border-slate-200/80 dark:border-slate-800 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[#0F2547] dark:text-[#38BDF8] shrink-0">
               <CheckCircle2 className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs text-slate-500">جملة الطلبات اللي كملت (2026)</p>
-              <p className="text-xl font-bold text-[#0F172A] tabular-nums mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                جملة الطلبات اللي كملت (2026)
+              </p>
+              <p className="text-xl font-bold text-[#0F172A] dark:text-white tabular-nums mt-0.5">
                 {totalCompleted.toLocaleString('en-US')} طلب
               </p>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#0F766E] shrink-0">
+          <div className="p-4 rounded-2xl bg-[#F8FAFC] dark:bg-[#0B1426]/90 border border-slate-200/80 dark:border-slate-800 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[#0F766E] dark:text-[#2DD4BF] shrink-0">
               <TrendingUp className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs text-slate-500">إنجاز هالشهر (نوفمبر)</p>
-              <p className="text-xl font-bold text-[#0F172A] tabular-nums mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                إنجاز هالشهر (نوفمبر)
+              </p>
+              <p className="text-xl font-bold text-[#0F172A] dark:text-white tabular-nums mt-0.5">
                 {currentMonth.completed} طلب{' '}
-                <span className="text-xs font-semibold text-[#0F766E]">
+                <span className="text-xs font-semibold text-[#0F766E] dark:text-[#2DD4BF]">
                   (+{monthlyGrowthPct}%)
                 </span>
               </p>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#F8FAFC] border border-slate-200/80 flex items-center gap-4">
-            <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-[#0F2547] shrink-0">
+          <div className="p-4 rounded-2xl bg-[#F8FAFC] dark:bg-[#0B1426]/90 border border-slate-200/80 dark:border-slate-800 flex items-center gap-4">
+            <div className="w-11 h-11 rounded-xl bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[#0F2547] dark:text-[#38BDF8] shrink-0">
               <BarChart3 className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs text-slate-500">المعدل الشهري للطلبات</p>
-              <p className="text-xl font-bold text-[#0F172A] tabular-nums mt-0.5">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                المعدل الشهري للطلبات
+              </p>
+              <p className="text-xl font-bold text-[#0F172A] dark:text-white tabular-nums mt-0.5">
                 {monthlyAverage} طلب / شهر
               </p>
             </div>
@@ -240,25 +255,25 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
 
         {/* Recharts Visualization Container */}
         <div className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-300">
             <div className="flex items-center gap-5">
               <span className="inline-flex items-center gap-2">
                 <span
-                  className="w-3 h-3 rounded-xs bg-[#0F2547] inline-block"
+                  className="w-3 h-3 rounded-xs bg-[#0F2547] dark:bg-[#38BDF8] inline-block"
                   aria-hidden="true"
                 />
                 <span>الطلبات اللي كملت الكل</span>
               </span>
               <span className="inline-flex items-center gap-2">
                 <span
-                  className="w-3 h-3 rounded-xs bg-[#0D9488] inline-block"
+                  className="w-3 h-3 rounded-xs bg-[#0D9488] dark:bg-[#2DD4BF] inline-block"
                   aria-hidden="true"
                 />
                 <span>طلبات كملت في وقتها</span>
               </span>
             </div>
             {userCompletedCount > 0 && (
-              <span className="text-[#0F766E] font-medium tabular-nums">
+              <span className="text-[#0F766E] dark:text-[#2DD4BF] font-medium tabular-nums">
                 بالحساب متاع {userCompletedCount} خدمة كملتها إنت
               </span>
             )}
@@ -266,7 +281,7 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
 
           <div
             dir="ltr"
-            className="w-full h-[300px] sm:h-[340px] bg-[#F8FAFC]/70 border border-slate-200/70 rounded-2xl pt-5 pb-2 px-2 sm:px-4"
+            className="w-full h-[300px] sm:h-[340px] bg-[#F8FAFC]/70 dark:bg-[#0B1426]/80 border border-slate-200/70 dark:border-slate-800 rounded-2xl pt-5 pb-2 px-2 sm:px-4"
           >
             <ResponsiveContainer width="100%" height="100%">
               {chartType === 'area' ? (
@@ -282,8 +297,16 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                       x2="0"
                       y2="1"
                     >
-                      <stop offset="5%" stopColor="#0F2547" stopOpacity={0.22} />
-                      <stop offset="95%" stopColor="#0F2547" stopOpacity={0.01} />
+                      <stop
+                        offset="5%"
+                        stopColor={primarySeriesColor}
+                        stopOpacity={isDark ? 0.28 : 0.22}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor={primarySeriesColor}
+                        stopOpacity={0.01}
+                      />
                     </linearGradient>
                     <linearGradient
                       id="turquoiseOnTimeFill"
@@ -292,27 +315,35 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                       x2="0"
                       y2="1"
                     >
-                      <stop offset="5%" stopColor="#0D9488" stopOpacity={0.18} />
-                      <stop offset="95%" stopColor="#0D9488" stopOpacity={0.01} />
+                      <stop
+                        offset="5%"
+                        stopColor={secondarySeriesColor}
+                        stopOpacity={isDark ? 0.24 : 0.18}
+                      />
+                      <stop
+                        offset="95%"
+                        stopColor={secondarySeriesColor}
+                        stopOpacity={0.01}
+                      />
                     </linearGradient>
                   </defs>
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="#E2E8F0"
+                    stroke={gridColor}
                     vertical={false}
                   />
                   <XAxis
                     dataKey="month"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#475569', fontSize: 12, fontFamily: 'Cairo' }}
+                    tick={{ fill: axisTickColor, fontSize: 12, fontFamily: 'Cairo' }}
                     dy={8}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
                     tick={{
-                      fill: '#64748B',
+                      fill: axisTickColor,
                       fontSize: 12,
                       fontFamily: 'IBM Plex Mono',
                     }}
@@ -321,21 +352,31 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                   <Area
                     type="monotone"
                     dataKey="completed"
-                    stroke="#0F2547"
+                    stroke={primarySeriesColor}
                     strokeWidth={2.5}
                     fillOpacity={1}
                     fill="url(#navyCompletedFill)"
-                    activeDot={{ r: 5, fill: '#0F2547', stroke: '#FFFFFF', strokeWidth: 2 }}
+                    activeDot={{
+                      r: 5,
+                      fill: primarySeriesColor,
+                      stroke: isDark ? '#0B1426' : '#FFFFFF',
+                      strokeWidth: 2,
+                    }}
                   />
                   <Area
                     type="monotone"
                     dataKey="onTime"
-                    stroke="#0D9488"
+                    stroke={secondarySeriesColor}
                     strokeWidth={2}
                     strokeDasharray="4 4"
                     fillOpacity={1}
                     fill="url(#turquoiseOnTimeFill)"
-                    activeDot={{ r: 4, fill: '#0D9488', stroke: '#FFFFFF', strokeWidth: 2 }}
+                    activeDot={{
+                      r: 4,
+                      fill: secondarySeriesColor,
+                      stroke: isDark ? '#0B1426' : '#FFFFFF',
+                      strokeWidth: 2,
+                    }}
                   />
                 </AreaChart>
               ) : (
@@ -346,38 +387,42 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                 >
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="#E2E8F0"
+                    stroke={gridColor}
                     vertical={false}
                   />
                   <XAxis
                     dataKey="month"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#475569', fontSize: 12, fontFamily: 'Cairo' }}
+                    tick={{ fill: axisTickColor, fontSize: 12, fontFamily: 'Cairo' }}
                     dy={8}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
                     tick={{
-                      fill: '#64748B',
+                      fill: axisTickColor,
                       fontSize: 12,
                       fontFamily: 'IBM Plex Mono',
                     }}
                   />
                   <Tooltip
                     content={<StatsTooltip />}
-                    cursor={{ fill: 'rgba(15, 37, 71, 0.04)' }}
+                    cursor={{
+                      fill: isDark
+                        ? 'rgba(148, 163, 184, 0.08)'
+                        : 'rgba(15, 37, 71, 0.04)',
+                    }}
                   />
                   <Bar
                     dataKey="completed"
-                    fill="#0F2547"
+                    fill={primarySeriesColor}
                     radius={[6, 6, 0, 0]}
                     maxBarSize={26}
                   />
                   <Bar
                     dataKey="onTime"
-                    fill="#0D9488"
+                    fill={secondarySeriesColor}
                     radius={[6, 6, 0, 0]}
                     maxBarSize={26}
                   />

@@ -46,14 +46,14 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
 
     if (toast.variant === 'booking') {
       return (
-        <div className="w-9 h-9 rounded-xl bg-[#0F2547] text-[#2DD4BF] flex items-center justify-center shrink-0 shadow-xs">
+        <div className="w-9 h-9 rounded-xl bg-[#0F2547] dark:bg-[#172844] text-[#2DD4BF] flex items-center justify-center shrink-0 shadow-xs">
           <CalendarCheck2 className="w-4 h-4" aria-hidden="true" />
         </div>
       );
     }
 
     return (
-      <div className="w-9 h-9 rounded-xl bg-teal-50 border border-teal-200 text-[#0F766E] flex items-center justify-center shrink-0">
+      <div className="w-9 h-9 rounded-xl bg-teal-50 dark:bg-teal-950/60 border border-teal-200 dark:border-teal-700/70 text-[#0F766E] dark:text-[#2DD4BF] flex items-center justify-center shrink-0">
         <CheckCircle2 className="w-4 h-4" aria-hidden="true" />
       </div>
     );
@@ -64,19 +64,19 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
       role="status"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
-      className={`animate-toast-in pointer-events-auto bg-white/95 backdrop-blur-md border rounded-2xl p-3.5 sm:p-4 shadow-[0_14px_34px_-10px_rgba(15,37,71,0.22)] flex items-start gap-3 ${
+      className={`animate-toast-in pointer-events-auto bg-white/95 dark:bg-[#111C30]/95 backdrop-blur-md border rounded-2xl p-3.5 sm:p-4 shadow-[0_14px_34px_-10px_rgba(15,37,71,0.22)] dark:shadow-[0_14px_34px_-10px_rgba(0,0,0,0.65)] flex items-start gap-3 ${
         toast.variant === 'accepted'
-          ? 'border-teal-200/90'
-          : 'border-slate-200/90'
+          ? 'border-teal-200/90 dark:border-teal-700/60'
+          : 'border-slate-200/90 dark:border-slate-700'
       }`}
     >
       {renderIcon()}
 
       <div className="flex-1 min-w-0 space-y-1">
-        <p className="text-sm font-bold text-[#0F172A] leading-snug">
+        <p className="text-sm font-bold text-[#0F172A] dark:text-white leading-snug">
           {toast.title}
         </p>
-        <p className="text-xs text-slate-600 leading-relaxed">
+        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
           {toast.message}
         </p>
 
@@ -87,7 +87,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
               toast.onAction?.();
               onDismiss(toast.id);
             }}
-            className="mt-1 inline-flex items-center text-xs font-semibold text-[#0F766E] hover:text-[#0F2547] underline underline-offset-4 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] rounded"
+            className="mt-1 inline-flex items-center text-xs font-semibold text-[#0F766E] dark:text-[#2DD4BF] hover:text-[#0F2547] dark:hover:text-teal-200 underline underline-offset-4 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] rounded"
           >
             {toast.actionLabel}
           </button>
@@ -98,7 +98,7 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
         type="button"
         onClick={() => onDismiss(toast.id)}
         aria-label="سكّر التنبيه"
-        className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer shrink-0"
+        className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer shrink-0"
       >
         <X className="w-4 h-4" aria-hidden="true" />
       </button>

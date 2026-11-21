@@ -109,13 +109,13 @@ export function FaqSection() {
         {/* Right/Start Column: Section Heading, Topic Filters & Search */}
         <div className="lg:col-span-5 space-y-6">
           <div className="space-y-2">
-            <p className="text-xs font-semibold text-[#0F766E]">
+            <p className="text-xs font-semibold text-[#0F766E] dark:text-[#2DD4BF]">
               إجابات سريعة وواضحة
             </p>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A] leading-snug">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A] dark:text-white leading-snug">
               الأسئلة اللي تتعاود برشا على الحجز والخلاص في صفاقس
             </h2>
-            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed">
               تصفح الإجابات على أكثر الأسئلة اللي يسألوها الناس على طريقة طلب
               الخدمات، المناطق المغطاة في ولاية صفاقس، وطرق الخلاص المضمونة.
             </p>
@@ -133,7 +133,7 @@ export function FaqSection() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="لوّج بكلمة (مثلاً: D17، إلغاء، ضمان...)"
-              className="w-full h-11 pr-10 pl-3.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 placeholder:text-slate-400 shadow-2xs focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/15 transition-colors"
+              className="w-full h-11 pr-10 pl-3.5 bg-white dark:bg-[#111C30] border border-slate-200 dark:border-slate-700 rounded-xl text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 shadow-2xs focus:outline-none focus:border-[#0D9488] focus:ring-2 focus:ring-[#0D9488]/15 transition-colors"
             />
           </label>
 
@@ -154,8 +154,8 @@ export function FaqSection() {
                   onClick={() => setSelectedTopic(topic.id)}
                   className={`px-3.5 py-2 min-h-[40px] text-xs font-semibold rounded-xl border transition-colors whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] ${
                     isActive
-                      ? 'bg-[#0F2547] text-white border-[#0F2547] shadow-xs'
-                      : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:text-[#0F2547]'
+                      ? 'bg-[#0F2547] dark:bg-[#0F766E] text-white border-[#0F2547] dark:border-[#0F766E] shadow-xs'
+                      : 'bg-white dark:bg-[#111C30] text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 hover:text-[#0F2547] dark:hover:text-white'
                   }`}
                 >
                   {topic.label}
@@ -165,27 +165,27 @@ export function FaqSection() {
           </div>
 
           {/* Direct Support Note */}
-          <div className="p-4 rounded-2xl bg-white border border-slate-200/80 flex items-start gap-3.5 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-[#F8FAFC] border border-slate-200 flex items-center justify-center text-[#0F766E] shrink-0">
+          <div className="p-4 rounded-2xl bg-white dark:bg-[#111C30] border border-slate-200/80 dark:border-slate-800 flex items-start gap-3.5 shadow-2xs">
+            <div className="w-10 h-10 rounded-xl bg-[#F8FAFC] dark:bg-[#0B1426] border border-slate-200 dark:border-slate-700 flex items-center justify-center text-[#0F766E] dark:text-[#2DD4BF] shrink-0">
               <HelpCircle className="w-5 h-5" aria-hidden="true" />
             </div>
             <div className="space-y-1 text-xs">
-              <p className="font-semibold text-[#0F172A]">
+              <p className="font-semibold text-[#0F172A] dark:text-white">
                 ما لقيتش جواب لسؤالك؟
               </p>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
                 تنجم تراسلنا ديركت على{' '}
                 <a
                   href="mailto:contact@winnal9a.tn"
                   dir="ltr"
-                  className="font-semibold text-[#0F766E] hover:underline"
+                  className="font-semibold text-[#0F766E] dark:text-[#2DD4BF] hover:underline"
                 >
                   contact@winnal9a.tn
                 </a>{' '}
                 ولا تشوف{' '}
                 <a
                   href="#payment"
-                  className="font-semibold text-[#0F2547] hover:underline"
+                  className="font-semibold text-[#0F2547] dark:text-white hover:underline"
                 >
                   طرق الخلاص
                 </a>
@@ -199,10 +199,10 @@ export function FaqSection() {
         <div className="lg:col-span-7">
           {filteredFaqs.length === 0 ? (
             <div className="card-premium rounded-2xl p-10 text-center space-y-3">
-              <p className="text-sm font-semibold text-[#0F172A]">
+              <p className="text-sm font-semibold text-[#0F172A] dark:text-white">
                 ما فماش أسئلة تطابق الكلمة اللي كتبتها
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 جرّب كلمة أخرى ولا اختار «الأسئلة الكل».
               </p>
               <button
@@ -211,31 +211,33 @@ export function FaqSection() {
                   setQuery('');
                   setSelectedTopic('all');
                 }}
-                className="px-4 py-2 min-h-[40px] bg-[#0F2547] hover:bg-[#173666] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
+                className="px-4 py-2 min-h-[40px] bg-[#0F2547] dark:bg-[#0F766E] hover:bg-[#173666] dark:hover:bg-[#0D9488] text-white text-xs font-semibold rounded-xl transition-colors cursor-pointer"
               >
                 ورّي الأسئلة الكل
               </button>
             </div>
           ) : (
-            <div className="card-premium rounded-2xl divide-y divide-slate-200/80 overflow-hidden">
+            <div className="card-premium rounded-2xl divide-y divide-slate-200/80 dark:divide-slate-800 overflow-hidden">
               {filteredFaqs.map((item) => {
                 const isOpen = openId === item.id;
                 return (
-                  <div key={item.id} className="bg-white">
+                  <div key={item.id} className="bg-white dark:bg-[#111C30]">
                     <button
                       type="button"
                       aria-expanded={isOpen}
                       aria-controls={`faq-panel-${item.id}`}
                       onClick={() => handleToggle(item.id)}
-                      className="w-full px-5 sm:px-6 py-5 text-right flex items-start justify-between gap-4 hover:bg-[#F8FAFC]/80 transition-colors cursor-pointer focus-visible:outline-none focus-visible:bg-[#F8FAFC]"
+                      className="w-full px-5 sm:px-6 py-5 text-right flex items-start justify-between gap-4 hover:bg-[#F8FAFC]/80 dark:hover:bg-[#16233B]/70 transition-colors cursor-pointer focus-visible:outline-none focus-visible:bg-[#F8FAFC] dark:focus-visible:bg-[#16233B]"
                     >
                       <div className="space-y-1">
-                        <span className="block text-xs font-medium text-[#0F766E]">
+                        <span className="block text-xs font-medium text-[#0F766E] dark:text-[#2DD4BF]">
                           {item.topicLabel}
                         </span>
                         <span
                           className={`block text-base font-bold leading-snug ${
-                            isOpen ? 'text-[#0F2547]' : 'text-[#0F172A]'
+                            isOpen
+                              ? 'text-[#0F2547] dark:text-[#2DD4BF]'
+                              : 'text-[#0F172A] dark:text-white'
                           }`}
                         >
                           {item.question}
@@ -245,8 +247,8 @@ export function FaqSection() {
                       <span
                         className={`w-8 h-8 rounded-lg border flex items-center justify-center shrink-0 mt-1 transition-colors ${
                           isOpen
-                            ? 'bg-[#0F2547] border-[#0F2547] text-white'
-                            : 'bg-[#F8FAFC] border-slate-200 text-slate-500'
+                            ? 'bg-[#0F2547] dark:bg-[#0F766E] border-[#0F2547] dark:border-[#0F766E] text-white'
+                            : 'bg-[#F8FAFC] dark:bg-[#0B1426] border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         <ChevronDown
@@ -261,7 +263,7 @@ export function FaqSection() {
                     {isOpen && (
                       <div
                         id={`faq-panel-${item.id}`}
-                        className="px-5 sm:px-6 pb-5 pt-0 text-sm text-slate-600 leading-relaxed"
+                        className="px-5 sm:px-6 pb-5 pt-0 text-sm text-slate-600 dark:text-slate-300 leading-relaxed"
                       >
                         {item.answer}
                       </div>

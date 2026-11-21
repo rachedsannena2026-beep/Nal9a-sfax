@@ -28,7 +28,7 @@ export function ServiceCard({
     <article className="group card-premium rounded-2xl overflow-hidden flex flex-col justify-between hover:-translate-y-0.5">
       <div>
         {/* 4:3 Media Header */}
-        <div className="relative aspect-[4/3] bg-slate-100 overflow-hidden border-b border-slate-100">
+        <div className="relative aspect-[4/3] bg-slate-100 dark:bg-slate-800 overflow-hidden border-b border-slate-100 dark:border-slate-800">
           {!imgError ? (
             <img
               src={service.imageUrl}
@@ -38,12 +38,12 @@ export function ServiceCard({
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-slate-100 to-teal-50/40 flex flex-col items-center justify-center p-4 text-center gap-2">
+            <div className="w-full h-full bg-gradient-to-br from-slate-100 to-teal-50/40 dark:from-[#111C30] dark:to-[#0B1426] flex flex-col items-center justify-center p-4 text-center gap-2">
               <CategoryIcon
                 category={service.category}
-                className="w-8 h-8 text-[#0F2547]"
+                className="w-8 h-8 text-[#0F2547] dark:text-[#2DD4BF]"
               />
-              <span className="text-xs font-medium text-slate-600">
+              <span className="text-xs font-medium text-slate-600 dark:text-slate-300">
                 {service.categoryLabel}
               </span>
             </div>
@@ -61,8 +61,8 @@ export function ServiceCard({
             title={isFavorite ? 'نحّي من المفضلة' : 'إضافة للمفضلة'}
             className={`absolute top-3 left-3 z-10 w-10 h-10 flex items-center justify-center rounded-xl border shadow-sm transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488] ${
               isFavorite
-                ? 'bg-white/95 border-rose-200 text-rose-600 hover:bg-rose-50'
-                : 'bg-white/90 backdrop-blur-xs border-slate-200/80 text-slate-600 hover:text-rose-600 hover:border-rose-200 hover:bg-white'
+                ? 'bg-white/95 dark:bg-[#111C30]/95 border-rose-200 dark:border-rose-500/40 text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/60'
+                : 'bg-white/90 dark:bg-[#111C30]/85 backdrop-blur-xs border-slate-200/80 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 hover:bg-white dark:hover:bg-[#111C30]'
             }`}
           >
             <Heart
@@ -79,8 +79,8 @@ export function ServiceCard({
         {/* Content Body */}
         <div className="p-5 sm:p-6 space-y-3">
           {/* Unboxed Metadata Kicker (Zero-Pill Rule) */}
-          <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-slate-500">
-            <span className="inline-flex items-center gap-1.5 font-semibold text-[#0F766E]">
+          <div className="flex items-center flex-wrap gap-x-2 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+            <span className="inline-flex items-center gap-1.5 font-semibold text-[#0F766E] dark:text-[#2DD4BF]">
               <CategoryIcon
                 category={service.category}
                 className="w-3.5 h-3.5 shrink-0"
@@ -93,45 +93,45 @@ export function ServiceCard({
             <span>{service.availability}</span>
           </div>
 
-          <h3 className="text-lg font-bold text-[#0F172A] leading-snug">
+          <h3 className="text-lg font-bold text-[#0F172A] dark:text-white leading-snug">
             <button
               type="button"
               onClick={() => onSelect(service)}
-              className="text-right hover:text-[#0F766E] transition-colors cursor-pointer focus-visible:outline-none focus-visible:underline"
+              className="text-right hover:text-[#0F766E] dark:hover:text-[#2DD4BF] transition-colors cursor-pointer focus-visible:outline-none focus-visible:underline"
             >
               {service.title}
             </button>
           </h3>
 
-          <p className="text-sm text-slate-600 leading-relaxed line-clamp-2">
+          <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-2">
             {service.description}
           </p>
         </div>
       </div>
 
       {/* Footer Info, Average Rating & Action */}
-      <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-4 border-t border-slate-100 space-y-4">
-        <div className="flex items-center justify-between gap-3 text-xs text-slate-600">
+      <div className="px-5 sm:px-6 pb-5 sm:pb-6 pt-4 border-t border-slate-100 dark:border-slate-800 space-y-4">
+        <div className="flex items-center justify-between gap-3 text-xs text-slate-600 dark:text-slate-400">
           <div className="flex items-center gap-1.5 min-w-0">
             {service.verified && (
               <ShieldCheck
-                className="w-4 h-4 text-[#0D9488] shrink-0"
+                className="w-4 h-4 text-[#0D9488] dark:text-[#2DD4BF] shrink-0"
                 aria-label="مزود موثق"
               />
             )}
-            <span className="truncate font-medium text-slate-800">
+            <span className="truncate font-medium text-slate-800 dark:text-slate-200">
               {service.providerName}
             </span>
           </div>
 
-          <span className="inline-flex items-center gap-1 text-slate-500 shrink-0">
+          <span className="inline-flex items-center gap-1 text-slate-500 dark:text-slate-400 shrink-0">
             <Clock className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
             <span>{service.responseTime}</span>
           </span>
         </div>
 
         {/* Dedicated Average Rating Row */}
-        <div className="flex items-center justify-between gap-2 py-2 px-3 rounded-xl bg-[#F8FAFC] border border-slate-200/70">
+        <div className="flex items-center justify-between gap-2 py-2 px-3 rounded-xl bg-[#F8FAFC] dark:bg-[#0B1426]/80 border border-slate-200/70 dark:border-slate-800">
           <div className="flex items-center gap-2">
             <div
               className="flex items-center gap-0.5"
@@ -143,26 +143,26 @@ export function ServiceCard({
                   className={`w-3.5 h-3.5 ${
                     starIndex <= roundedStars
                       ? 'text-amber-500 fill-amber-500'
-                      : 'text-slate-300'
+                      : 'text-slate-300 dark:text-slate-600'
                   }`}
                   aria-hidden="true"
                 />
               ))}
             </div>
-            <span className="text-xs font-bold text-[#0F172A] tabular-nums">
+            <span className="text-xs font-bold text-[#0F172A] dark:text-white tabular-nums">
               {service.rating.toFixed(1)}
             </span>
           </div>
 
-          <span className="text-xs text-slate-500 tabular-nums">
+          <span className="text-xs text-slate-500 dark:text-slate-400 tabular-nums">
             معدل التقييم ({service.reviewCount})
           </span>
         </div>
 
         {/* Social Share Bar (WhatsApp, Facebook, X) */}
-        <div className="flex items-center justify-between gap-2 flex-wrap py-2 px-3 rounded-xl bg-[#F8FAFC]/85 border border-slate-200/70">
-          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-600">
-            <Share2 className="w-3.5 h-3.5 text-[#0F766E] shrink-0" aria-hidden="true" />
+        <div className="flex items-center justify-between gap-2 flex-wrap py-2 px-3 rounded-xl bg-[#F8FAFC]/85 dark:bg-[#0B1426]/80 border border-slate-200/70 dark:border-slate-800">
+          <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
+            <Share2 className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#2DD4BF] shrink-0" aria-hidden="true" />
             <span>شاركها:</span>
           </span>
 
@@ -174,7 +174,7 @@ export function ServiceCard({
               onClick={(e) => e.stopPropagation()}
               aria-label={`مشاركة ${service.title} على واتساب`}
               title="مشاركة على واتساب"
-              className="px-2.5 py-1.5 min-h-[34px] text-[11px] font-semibold rounded-lg border border-emerald-200/90 bg-white text-emerald-700 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 hover:-translate-y-0.5 shadow-2xs transition-all inline-flex items-center gap-1 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+              className="px-2.5 py-1.5 min-h-[34px] text-[11px] font-semibold rounded-lg border border-emerald-200/90 dark:border-emerald-500/35 bg-white dark:bg-[#111C30] text-emerald-700 dark:text-emerald-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 hover:-translate-y-0.5 shadow-2xs transition-all inline-flex items-center gap-1 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -193,7 +193,7 @@ export function ServiceCard({
               onClick={(e) => e.stopPropagation()}
               aria-label={`مشاركة ${service.title} على فايسبوك`}
               title="مشاركة على فايسبوك"
-              className="px-2.5 py-1.5 min-h-[34px] text-[11px] font-semibold rounded-lg border border-blue-200/90 bg-white text-blue-700 hover:bg-blue-600 hover:text-white hover:border-blue-600 hover:-translate-y-0.5 shadow-2xs transition-all inline-flex items-center gap-1 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+              className="px-2.5 py-1.5 min-h-[34px] text-[11px] font-semibold rounded-lg border border-blue-200/90 dark:border-blue-500/35 bg-white dark:bg-[#111C30] text-blue-700 dark:text-blue-400 hover:bg-blue-600 hover:text-white hover:border-blue-600 hover:-translate-y-0.5 shadow-2xs transition-all inline-flex items-center gap-1 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -212,7 +212,7 @@ export function ServiceCard({
               onClick={(e) => e.stopPropagation()}
               aria-label={`مشاركة ${service.title} على X`}
               title="مشاركة على تويتر / X"
-              className="px-2.5 py-1.5 min-h-[34px] text-[11px] font-semibold rounded-lg border border-slate-200 bg-white text-slate-800 hover:bg-[#0F172A] hover:text-white hover:border-[#0F172A] hover:-translate-y-0.5 shadow-2xs transition-all inline-flex items-center gap-1 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+              className="px-2.5 py-1.5 min-h-[34px] text-[11px] font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#111C30] text-slate-800 dark:text-slate-200 hover:bg-[#0F172A] dark:hover:bg-white hover:text-white dark:hover:text-[#0F172A] hover:border-[#0F172A] dark:hover:border-white hover:-translate-y-0.5 shadow-2xs transition-all inline-flex items-center gap-1 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
             >
               <svg
                 viewBox="0 0 24 24"
@@ -228,8 +228,10 @@ export function ServiceCard({
 
         <div className="flex items-center justify-between gap-4 pt-1">
           <div className="tabular-nums">
-            <span className="block text-xs text-slate-500">يبدأ من</span>
-            <span className="text-base font-bold text-[#0F172A]">
+            <span className="block text-xs text-slate-500 dark:text-slate-400">
+              يبدأ من
+            </span>
+            <span className="text-base font-bold text-[#0F172A] dark:text-white">
               {service.priceFrom} {service.priceUnit}
             </span>
           </div>
@@ -237,7 +239,7 @@ export function ServiceCard({
           <button
             type="button"
             onClick={() => onSelect(service)}
-            className="px-4 py-2.5 min-h-[42px] text-sm font-semibold text-[#0F2547] bg-slate-100 hover:bg-[#0F2547] hover:text-white rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+            className="px-4 py-2.5 min-h-[42px] text-sm font-semibold text-[#0F2547] dark:text-slate-100 bg-slate-100 dark:bg-[#1A2B49] hover:bg-[#0F2547] dark:hover:bg-[#0F766E] hover:text-white rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
           >
             التفاصيل والحجز
           </button>
