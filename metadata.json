@@ -1,6 +1,6 @@
 {
   "name": "winnal9a",
-  "description": "منصة winnal9a تجمع كل الخدمات الموثوقة في ولاية صفاقس في مكان واحد — صيانة، برمجة، تصميم، نقل، تنظيف واستشارات.",
+  "description": "منصة winnal9a تلمّلك كل الخدمات الموثوقة في ولاية صفاقس في بلاصة وحدة — تصليح، برمجة، تصميم، نقل، تنظيف واستشارات.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

@@ -33,19 +33,19 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
 
     const parsedPrice = Number(priceFrom);
     if (title.trim().length < 5) {
-      setErrorMsg('يرجى كتابة عنوان واضح للخدمة (5 أحرف على الأقل).');
+      setErrorMsg('عافاك اكتب عنوان واضح للخدمة (5 حروف على الأقل).');
       return;
     }
     if (providerName.trim().length < 2) {
-      setErrorMsg('يرجى كتابة اسم المزود أو الورشة.');
+      setErrorMsg('عافاك اكتب اسمك ولا اسم الورشة متاعك.');
       return;
     }
     if (!Number.isFinite(parsedPrice) || parsedPrice <= 0) {
-      setErrorMsg('يرجى إدخال سعر ابتدائي صحيح أكبر من صفر.');
+      setErrorMsg('عافاك حط سوم ابتدائي صحيح أكبر من صفر.');
       return;
     }
     if (description.trim().length < 15) {
-      setErrorMsg('يرجى إضافة وصف واضح للخدمة (15 حرفاً على الأقل).');
+      setErrorMsg('عافاك زيد وصف واضح للخدمة (15 حرف على الأقل).');
       return;
     }
 
@@ -60,16 +60,16 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
       city,
       priceFrom: parsedPrice,
       priceUnit: 'د.ت',
-      responseTime: 'خلال ساعة',
+      responseTime: 'في ساعة',
       responseMinutes: 60,
-      availability: 'متاح اليوم',
+      availability: 'متوفر اليوم',
       rating: 5.0,
       reviewCount: 1,
       description: description.trim(),
       deliverables: [
-        'تواصل مباشر لتحديد تفاصيل التنفيذ',
-        'تسعير واضح ومتفق عليه قبل بدء العمل',
-        'التزام بالمواعيد وجودة التسليم',
+        'تواصل ديركت باش تتفاهمو على تفاصيل الخدمة',
+        'سوم واضح ومتفق عليه قبل ما تبدأ الخدمة',
+        'التزام بالوقت وجودة في الخدمة',
       ],
       imageUrl: CATEGORY_IMAGES[category],
       verified: true,
@@ -94,14 +94,14 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
         <div className="lg:col-span-5 space-y-6">
           <div className="space-y-2">
             <p className="text-xs font-semibold text-[#0F766E]">
-              خطوات واضحة وسريعة
+              مراحل واضحة وساهلة
             </p>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A]">
-              كيف تستفيد من winnal9a؟
+              كيفاش تستعمل winnal9a؟
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              صممنا المنصة لتختصر عليك البحث العشوائي وتوصلك مباشرة إلى الشخص
-              المناسب في صفاقس بتسعير واضح.
+              عملنالك المنصة باش تنقص عليك التلويج وتوصلك ديركت للشخص الصحيح
+              في صفاقس بسوم واضح.
             </p>
           </div>
 
@@ -112,11 +112,11 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-base font-semibold text-[#0F172A]">
-                  01. ابحث حسب الحاجة والمنطقة
+                  01. لوّج حسب حاجتك وجهتك
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  اختر التصنيف أو اكتب نوع الخدمة المطلوبة، وحدد منطقتك في ولاية
-                  صفاقس للوصول إلى الأقرب إليك.
+                  اختار التصنيف ولا اكتب الخدمة اللي تلوج عليها، وحدّد جهتك في
+                  ولاية صفاقس باش تلقى الأقرب ليك.
                 </p>
               </div>
             </div>
@@ -127,11 +127,11 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-base font-semibold text-[#0F172A]">
-                  02. قارن التقييمات والأسعار الابتدائية
+                  02. قارن التقييمات والأسوام
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  اطّلع على تفاصيل ما يشمله العرض، متوسط زمن الاستجابة، وتجارب
-                  العملاء السابقين قبل التواصل.
+                  شوف شنوة تشمل الخدمة، قداش يبطى في الرد، وآراء الناس اللي
+                  جرّبوه قبلك قبل ما تطلب.
                 </p>
               </div>
             </div>
@@ -142,11 +142,11 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
               </div>
               <div className="space-y-1">
                 <h3 className="text-base font-semibold text-[#0F172A]">
-                  03. احجز موعدك واختر طريقة الدفع
+                  03. احجز موعدك واختار كيفاش تخلّص
                 </h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  أرسل طلبك خلال ثوانٍ واختر الدفع نقداً عند الإنجاز أو إلكترونياً
-                  عبر D17 والبطاقة البنكية مع رقم مرجعي في قائمة &laquo;طلباتي&raquo;.
+                  ابعث طلبك في ثواني واختار تخلّص كاش وقت تكمل الخدمة ولا بالـ
+                  D17 والكارطة البنكية وتابع الكل في &laquo;طلباتي&raquo;.
                 </p>
               </div>
             </div>
@@ -160,14 +160,14 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
         >
           <div className="space-y-1.5">
             <p className="text-xs font-semibold text-[#0F766E]">
-              لمزودي الخدمات في صفاقس
+              لمزودي الخدمات والحرفيين في صفاقس
             </p>
             <h2 className="text-xl sm:text-2xl font-bold text-[#0F172A]">
-              هل تقدم خدمة في ولاية صفاقس؟ أضفها إلى دليل winnal9a
+              عندك خدمة في ولاية صفاقس؟ زيدها في دليل winnal9a
             </h2>
             <p className="text-sm text-slate-600">
-              انشر خدمتك الآن لتظهر مباشرة في نتائج البحث أمام أهالي صفاقس
-              الباحثين عن تخصصك.
+              اهبط خدمتك توا باش تطلع ديركت في البحث قدّام أولاد وبنات صفاقس
+              اللي يلوجو على اختصاصك.
             </p>
           </div>
 
@@ -176,13 +176,13 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
               <CheckCircle2 className="w-5 h-5 text-[#0F766E] shrink-0 mt-0.5" />
               <div className="text-sm text-teal-950">
                 <p className="font-semibold">
-                  تمت إضافة خدمتك بنجاح: {publishedTitle}
+                  تزادت خدمتك بنجاح: {publishedTitle}
                 </p>
                 <a
                   href="#directory"
                   className="inline-block mt-1 font-medium text-[#0F766E] underline underline-offset-4"
                 >
-                  تصفحها الآن في دليل الخدمات
+                  شوفها توا في دليل الخدمات
                 </a>
               </div>
             </div>
@@ -208,14 +208,14 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
                   required
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="مثال: صيانة أجهزة التبريد المنزلية"
+                  placeholder="مثال: تصليح فريدجيدارات وكليماتيزور"
                   className="w-full h-11 px-3.5 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0D9488]"
                 />
               </label>
 
               <label className="block space-y-1.5">
                 <span className="text-xs font-medium text-slate-700">
-                  اسم المزود أو المؤسسة
+                  اسمك ولا اسم الورشة
                 </span>
                 <input
                   type="text"
@@ -252,24 +252,26 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
 
               <label className="block space-y-1.5">
                 <span className="text-xs font-medium text-slate-700">
-                  المنطقة في ولاية صفاقس
+                  الجهة في ولاية صفاقس
                 </span>
                 <select
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
                   className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-800 focus:bg-white focus:outline-none focus:border-[#0D9488]"
                 >
-                  {SFAX_AREAS.filter((a) => a !== 'كل مناطق صفاقس').map((a) => (
-                    <option key={a} value={a}>
-                      {a}
-                    </option>
-                  ))}
+                  {SFAX_AREAS.filter((a) => a !== 'مناطق صفاقس الكل').map(
+                    (a) => (
+                      <option key={a} value={a}>
+                        {a}
+                      </option>
+                    )
+                  )}
                 </select>
               </label>
 
               <label className="block space-y-1.5">
                 <span className="text-xs font-medium text-slate-700">
-                  السعر الابتدائي (د.ت)
+                  السوم يبدأ من (د.ت)
                 </span>
                 <input
                   type="number"
@@ -284,27 +286,27 @@ export function AddServiceSection({ onAddService }: AddServiceSectionProps) {
 
             <label className="block space-y-1.5">
               <span className="text-xs font-medium text-slate-700">
-                وصف الخدمة وما تقدمه للعميل
+                وصف الخدمة وشنوة تقدّم للحريف
               </span>
               <textarea
                 rows={3}
                 required
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="اشرح خبرتك، ما يشمله السعر الابتدائي، وساعات العمل المتاحة..."
+                placeholder="احكي على خبرتك، شنوة يشمل السوم الابتدائي، وأوقات خدمتك..."
                 className="w-full p-3.5 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0D9488] resize-none"
               />
             </label>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
               <p className="text-xs text-slate-500">
-                يتم نشر الخدمة فوراً في دليل المنصة.
+                تتهبط خدمتك في الحين في دليل المنصة.
               </p>
               <button
                 type="submit"
                 className="px-6 py-2.5 min-h-[44px] bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl shadow-sm transition-colors whitespace-nowrap shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0D9488]"
               >
-                نشر الخدمة الآن
+                اهبط الخدمة توا
               </button>
             </div>
           </form>

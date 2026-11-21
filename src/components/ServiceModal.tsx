@@ -4,7 +4,9 @@ import {
   CheckCircle2,
   Clock,
   CreditCard,
+  Heart,
   MapPin,
+  Share2,
   ShieldCheck,
   Smartphone,
   Star,
@@ -18,10 +20,17 @@ import {
   PaymentStatus,
   ServiceItem,
 } from '../types/service';
+import {
+  buildFacebookShareUrl,
+  buildTwitterShareUrl,
+  buildWhatsAppShareUrl,
+} from '../utils/share';
 import { CategoryIcon } from './CategoryIcon';
 
 interface ServiceModalProps {
   service: ServiceItem;
+  isFavorite: boolean;
+  onToggleFavorite: (serviceId: string) => void;
   onClose: () => void;
   onCreateBooking: (booking: BookingRequest) => void;
   onOpenRequests: () => void;
@@ -29,6 +38,8 @@ interface ServiceModalProps {
 
 export function ServiceModal({
   service,
+  isFavorite,
+  onToggleFavorite,
   onClose,
   onCreateBooking,
   onOpenRequests,
@@ -71,24 +82,24 @@ export function ServiceModal({
     const cleanedPhone = customerPhone.replace(/\s+/g, '');
 
     if (trimmedName.length < 3) {
-      setErrorMsg('يرجى إدخال الاسم الكامل (3 أحرف على الأقل).');
+      setErrorMsg('عافاك اكتب اسمك الكامل (3 حروف على الأقل).');
       return;
     }
 
     if (!/^[+]?\d{8,13}$/.test(cleanedPhone)) {
-      setErrorMsg('يرجى إدخال رقم هاتف صحيح (من 8 إلى 13 رقماً).');
+      setErrorMsg('عافاك اكتب نومرو تليفون صحيح (من 8 لـ 13 رقم).');
       return;
     }
 
     if (!preferredDate) {
-      setErrorMsg('يرجى تحديد التاريخ المفضل للخدمة.');
+      setErrorMsg('عافاك اختار النهار اللي تحب عليه للخدمة.');
       return;
     }
 
     if (paymentMethod === 'd17') {
       const cleanedWallet = walletPhone.replace(/\s+/g, '');
       if (!/^\d{8}$/.test(cleanedWallet)) {
-        setErrorMsg('يرجى إدخال رقم محفظة D17 / Flouci من 8 أرقام.');
+        setErrorMsg('عافاك اكتب نومرو تليفون D17 / Flouci متاع 8 أرقام.');
         return;
       }
     }
@@ -96,7 +107,7 @@ export function ServiceModal({
     if (paymentMethod === 'card') {
       const cleanedCard = cardLast4.replace(/\s+/g, '');
       if (!/^\d{12,16}$/.test(cleanedCard)) {
-        setErrorMsg('يرجى إدخال رقم البطاقة البنكية (من 12 إلى 16 رقماً).');
+        setErrorMsg('عافاك اكتب نومرو الكارطة البنكية (من 12 لـ 16 رقم).');
         return;
       }
     }
@@ -105,14 +116,14 @@ export function ServiceModal({
       (m) => m.id === paymentMethod
     );
 
-    let paymentStatus: PaymentStatus = 'الدفع عند الإنجاز';
+    let paymentStatus: PaymentStatus = 'الخلاص وقت الإنجاز';
     let paymentRef: string | undefined;
 
     if (paymentMethod === 'd17' || paymentMethod === 'card') {
-      paymentStatus = 'تم الدفع إلكترونياً';
+      paymentStatus = 'تخلّصت أونلاين';
       paymentRef = `PAY-${Math.floor(100000 + Math.random() * 900000)}`;
     } else if (paymentMethod === 'bank') {
-      paymentStatus = 'بانتظار التحويل';
+      paymentStatus = 'يستنّى في التحويل';
     }
 
     const randomDigits = Math.floor(1000 + Math.random() * 9000);
@@ -133,9 +144,9 @@ export function ServiceModal({
         month: 'short',
         day: 'numeric',
       }),
-      status: 'قيد المراجعة',
+      status: 'في المراجعة',
       paymentMethod,
-      paymentMethodLabel: methodMeta ? methodMeta.label : 'نقداً عند الإنجاز',
+      paymentMethodLabel: methodMeta ? methodMeta.label : 'كاش وقت تكمل الخدمة',
       paymentStatus,
       paymentRef,
     };
@@ -171,14 +182,84 @@ export function ServiceModal({
             <span>{service.providerName}</span>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="إغلاق النافذة"
-            className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <a
+              href={buildWhatsAppShareUrl(service)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`مشاركة ${service.title} على واتساب`}
+              title="مشاركة على واتساب"
+              className="px-2.5 sm:px-3 py-2 min-h-[40px] flex items-center gap-1.5 text-xs font-semibold rounded-xl border bg-emerald-50/70 border-emerald-200/80 text-emerald-800 hover:bg-emerald-600 hover:text-white hover:border-emerald-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+            >
+              <Share2 className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span className="hidden sm:inline">واتساب</span>
+            </a>
+
+            <a
+              href={buildFacebookShareUrl(service)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`مشاركة ${service.title} على فايسبوك`}
+              title="مشاركة على فايسبوك"
+              className="px-2.5 py-2 min-h-[40px] flex items-center justify-center text-xs font-semibold rounded-xl border bg-blue-50/70 border-blue-200/80 text-blue-800 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 h-4 fill-current shrink-0"
+                aria-hidden="true"
+              >
+                <path d="M13.5 21v-8.2h2.76l.41-3.2H13.5V7.56c0-.93.26-1.56 1.59-1.56h1.7V3.14c-.3-.04-1.3-.14-2.48-.14-2.45 0-4.13 1.5-4.13 4.24v2.36H7.4v3.2h2.78V21h3.32Z" />
+              </svg>
+            </a>
+
+            <a
+              href={buildTwitterShareUrl(service)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`مشاركة ${service.title} على X`}
+              title="مشاركة على تويتر / X"
+              className="px-2.5 py-2 min-h-[40px] flex items-center justify-center text-xs font-semibold rounded-xl border bg-slate-50 border-slate-200 text-slate-800 hover:bg-[#0F172A] hover:text-white hover:border-[#0F172A] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0D9488]"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="w-3.5 h-3.5 fill-current shrink-0"
+                aria-hidden="true"
+              >
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117Z" />
+              </svg>
+            </a>
+
+            <button
+              type="button"
+              onClick={() => onToggleFavorite(service.id)}
+              aria-pressed={isFavorite}
+              aria-label={isFavorite ? 'نحّي من المفضلة' : 'إضافة للمفضلة'}
+              className={`px-3 py-2 min-h-[40px] flex items-center gap-1.5 text-xs font-semibold rounded-xl border transition-colors cursor-pointer ${
+                isFavorite
+                  ? 'bg-rose-50 border-rose-200 text-rose-600'
+                  : 'bg-white border-slate-200 text-slate-600 hover:text-rose-600 hover:border-rose-200'
+              }`}
+            >
+              <Heart
+                className={`w-4 h-4 ${
+                  isFavorite ? 'fill-rose-500 text-rose-500' : ''
+                }`}
+                aria-hidden="true"
+              />
+              <span className="hidden sm:inline">
+                {isFavorite ? 'في المفضلة' : 'إضافة للمفضلة'}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="سكّر النافذة"
+              className="p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Body: 2-Column Details & Booking + Payment */}
@@ -231,7 +312,7 @@ export function ServiceModal({
                 </span>
                 <span className="inline-flex items-center gap-1">
                   <Clock className="w-4 h-4 text-slate-400" />
-                  الرد {service.responseTime}
+                  يرد {service.responseTime}
                 </span>
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="w-4 h-4 text-slate-400" />
@@ -247,7 +328,7 @@ export function ServiceModal({
             {/* Deliverables */}
             <div className="pt-4 border-t border-slate-200 space-y-3">
               <h3 className="text-base font-semibold text-[#0F172A]">
-                ما يشمله العرض الأساسي
+                شنوة تشمل الخدمة الأساسية
               </h3>
               <ul className="space-y-2.5">
                 {service.deliverables.map((item, idx) => (
@@ -265,11 +346,11 @@ export function ServiceModal({
             {/* Customer Reviews */}
             <div className="pt-4 border-t border-slate-200 space-y-3">
               <h3 className="text-base font-semibold text-[#0F172A]">
-                آراء العملاء السابقين
+                آراء الناس اللي جرّبو الخدمة
               </h3>
               {service.reviews.length === 0 ? (
                 <p className="text-sm text-slate-500">
-                  خدمة مضافة حديثاً — كن أول من يقيّم التجربة بعد الحجز.
+                  خدمة جديدة في الدليل — كون أول واحد يقيّم التجربة بعد ما تحجز.
                 </p>
               ) : (
                 <div className="space-y-3">
@@ -300,7 +381,7 @@ export function ServiceModal({
               <div className="pb-4 border-b border-slate-200 flex items-baseline justify-between gap-2">
                 <div>
                   <span className="text-xs text-slate-500 block">
-                    التسعير التقديري ابتداءً من
+                    السوم التقديري يبدأ من
                   </span>
                   <span className="text-2xl font-bold text-[#0F172A] tabular-nums">
                     {service.priceFrom} {service.priceUnit}
@@ -317,21 +398,21 @@ export function ServiceModal({
                     <CheckCircle2 className="w-6 h-6 text-[#0D9488] shrink-0 mt-0.5" />
                     <div>
                       <h4 className="text-base font-bold text-slate-900">
-                        تم تسجيل طلبك بنجاح
+                        طلبك تسجّل بنجاح
                       </h4>
                       <p className="text-sm text-slate-600 mt-1">
-                        سيتواصل معك فريق{' '}
+                        فريق{' '}
                         <strong className="text-slate-900">
                           {service.providerName}
                         </strong>{' '}
-                        {service.responseTime} لتأكيد الموعد.
+                        باش يكلّمك {service.responseTime} باش يأكد الموعد.
                       </p>
                     </div>
                   </div>
 
                   <div className="bg-white border border-slate-200 rounded-xl p-4 space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span className="text-slate-500">رقم المرجع</span>
+                      <span className="text-slate-500">نومرو الطلب</span>
                       <span
                         dir="ltr"
                         className="font-mono-num font-semibold text-[#0F2547]"
@@ -340,32 +421,32 @@ export function ServiceModal({
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-500">الموعد المفضل</span>
+                      <span className="text-slate-500">الموعد اللي اخترتو</span>
                       <span className="tabular-nums text-slate-900">
                         {confirmedRequest.preferredDate}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-500">المنطقة</span>
+                      <span className="text-slate-500">الجهة</span>
                       <span className="text-slate-900">
                         {confirmedRequest.city}
                       </span>
                     </div>
                     <div className="flex justify-between pt-2 border-t border-slate-100">
-                      <span className="text-slate-500">طريقة الدفع</span>
+                      <span className="text-slate-500">طريقة الخلاص</span>
                       <span className="font-medium text-slate-900">
                         {confirmedRequest.paymentMethodLabel}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-500">حالة الدفع</span>
+                      <span className="text-slate-500">حالة الخلاص</span>
                       <span className="font-semibold text-[#0F766E]">
                         {confirmedRequest.paymentStatus}
                       </span>
                     </div>
                     {confirmedRequest.paymentRef && (
                       <div className="flex justify-between">
-                        <span className="text-slate-500">وصل الدفع</span>
+                        <span className="text-slate-500">وصل الخلاص</span>
                         <span
                           dir="ltr"
                           className="font-mono-num text-[#0F766E] font-semibold"
@@ -385,21 +466,21 @@ export function ServiceModal({
                       }}
                       className="flex-1 py-2.5 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer"
                     >
-                      عرض في طلباتي
+                      شوف في طلباتي
                     </button>
                     <button
                       type="button"
                       onClick={onClose}
                       className="py-2.5 min-h-[44px] px-4 bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 text-sm font-medium rounded-xl transition-colors cursor-pointer"
                     >
-                      إغلاق
+                      سكّر
                     </button>
                   </div>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <h3 className="text-base font-bold text-[#0F172A]">
-                    تفاصيل الحجز والدفع
+                    تفاصيل الحجز والخلاص
                   </h3>
 
                   {errorMsg && (
@@ -413,7 +494,7 @@ export function ServiceModal({
 
                   <label className="block space-y-1.5">
                     <span className="text-xs font-medium text-slate-700">
-                      الاسم الكامل
+                      الاسم واللقب
                     </span>
                     <input
                       type="text"
@@ -427,7 +508,7 @@ export function ServiceModal({
 
                   <label className="block space-y-1.5">
                     <span className="text-xs font-medium text-slate-700">
-                      رقم الهاتف للتواصل
+                      نومرو التليفون للتواصل
                     </span>
                     <input
                       type="tel"
@@ -443,14 +524,14 @@ export function ServiceModal({
                   <div className="grid grid-cols-2 gap-3">
                     <label className="block space-y-1.5">
                       <span className="text-xs font-medium text-slate-700">
-                        المنطقة في صفاقس
+                        الجهة في صفاقس
                       </span>
                       <select
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
                         className="w-full h-11 px-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 focus:outline-none focus:border-[#0D9488]"
                       >
-                        {SFAX_AREAS.filter((a) => a !== 'كل مناطق صفاقس').map(
+                        {SFAX_AREAS.filter((a) => a !== 'مناطق صفاقس الكل').map(
                           (a) => (
                             <option key={a} value={a}>
                               {a}
@@ -462,7 +543,7 @@ export function ServiceModal({
 
                     <label className="block space-y-1.5">
                       <span className="text-xs font-medium text-slate-700">
-                        الموعد المفضل
+                        الموعد المناسب
                       </span>
                       <input
                         type="date"
@@ -477,7 +558,7 @@ export function ServiceModal({
                   {/* Payment Method Selection */}
                   <div className="space-y-2 pt-1">
                     <span className="block text-xs font-semibold text-slate-800">
-                      طريقة الدفع المفضلة
+                      كيفاش تحب تخلّص؟
                     </span>
                     <div className="grid grid-cols-2 gap-2">
                       {PAYMENT_METHOD_OPTIONS.map((opt) => {
@@ -515,7 +596,7 @@ export function ServiceModal({
                         required
                         value={walletPhone}
                         onChange={(e) => setWalletPhone(e.target.value)}
-                        placeholder="رقم محفظة D17 / Flouci (8 أرقام)"
+                        placeholder="نومرو D17 / Flouci (8 أرقام)"
                         className="w-full h-11 px-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 text-right tabular-nums focus:outline-none focus:border-[#0D9488]"
                       />
                     )}
@@ -527,7 +608,7 @@ export function ServiceModal({
                         required
                         value={cardLast4}
                         onChange={(e) => setCardLast4(e.target.value)}
-                        placeholder="رقم البطاقة (4532 8900 1234 5678)"
+                        placeholder="نومرو الكارطة (4532 8900 1234 5678)"
                         className="w-full h-11 px-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 text-right font-mono-num focus:outline-none focus:border-[#0D9488]"
                       />
                     )}
@@ -535,7 +616,7 @@ export function ServiceModal({
                     {paymentMethod === 'bank' && (
                       <div className="p-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-600 space-y-1">
                         <span className="font-semibold text-slate-800 block">
-                          بيانات التحويل البنكي (RIB صفاقس):
+                          معلومات التحويل البنكي (RIB صفاقس):
                         </span>
                         <span
                           dir="ltr"
@@ -549,13 +630,13 @@ export function ServiceModal({
 
                   <label className="block space-y-1.5">
                     <span className="text-xs font-medium text-slate-700">
-                      ملاحظات إضافية (اختياري)
+                      ملاحظات زايدة (اختياري)
                     </span>
                     <textarea
                       rows={2}
                       value={notes}
                       onChange={(e) => setNotes(e.target.value)}
-                      placeholder="اذكر تفاصيل إضافية مثل العنوان الدقيق أو نوع العطل..."
+                      placeholder="زيد وضح البلاصة بالضبط ولا نوع المشكلة..."
                       className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-[#0D9488] resize-none"
                     />
                   </label>
@@ -565,8 +646,8 @@ export function ServiceModal({
                     className="w-full py-3 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0D9488]"
                   >
                     {paymentMethod === 'd17' || paymentMethod === 'card'
-                      ? `تأكيد الحجز والدفع (${service.priceFrom} د.ت)`
-                      : 'تأكيد إرسال الطلب'}
+                      ? `أكّد الحجز والخلاص (${service.priceFrom} د.ت)`
+                      : 'أكّد وابعت الطلب'}
                   </button>
                 </form>
               )}

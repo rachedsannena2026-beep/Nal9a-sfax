@@ -9,8 +9,8 @@ export function Footer() {
             <BrandLogo />
           </a>
           <p className="text-sm text-slate-500">
-            منصة موحدة للعثور على الخدمات الموثوقة في ولاية صفاقس وحجزها
-            بشفافية.
+            منصة موحدة باش تلقى الخدمات الموثوقة في ولاية صفاقس وتحجزها بكل
+            وضوح.
           </p>
         </div>
 
@@ -31,19 +31,19 @@ export function Footer() {
             href="#payment"
             className="hover:text-[#0F2547] transition-colors whitespace-nowrap"
           >
-            طرق الدفع
+            طرق الخلاص
           </a>
           <a
             href="#how-it-works"
             className="hover:text-[#0F2547] transition-colors whitespace-nowrap"
           >
-            كيف نعمل
+            كيفاش تخدم
           </a>
           <a
             href="#add-service"
             className="hover:text-[#0F2547] transition-colors whitespace-nowrap"
           >
-            انضم كمزود خدمة
+            زيد خدمتك
           </a>
           <a
             href="mailto:contact@winnal9a.tn"
@@ -56,8 +56,8 @@ export function Footer() {
       </div>
 
       <div className="border-t border-slate-100 py-4 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
-        <span>© 2026 winnal9a. جميع الحقوق محفوظة.</span>
-        <span>أسعار تقديرية شفافة وحجز مباشر مع المزودين في صفاقس.</span>
+        <span>© 2026 winnal9a. الحقوق الكل محفوظة.</span>
+        <span>أسوام واضحة وحجز ديركت مع الحرفيين والمختصين في صفاقس.</span>
       </div>
     </footer>
   );

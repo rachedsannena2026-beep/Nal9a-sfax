@@ -64,7 +64,7 @@ function StatsTooltip({ active, payload, label }: CustomTooltipProps) {
       </p>
       {completedItem && (
         <div className="flex items-center justify-between gap-5">
-          <span className="text-slate-300">الطلبات المنجزة:</span>
+          <span className="text-slate-300">الطلبات اللي كملت:</span>
           <span className="font-bold text-white tabular-nums">
             {completedItem.value} طلب
           </span>
@@ -72,7 +72,7 @@ function StatsTooltip({ active, payload, label }: CustomTooltipProps) {
       )}
       {onTimeItem && (
         <div className="flex items-center justify-between gap-5">
-          <span className="text-slate-300">منجزة في الموعد:</span>
+          <span className="text-slate-300">كملت في وقتها:</span>
           <span className="font-bold text-[#2DD4BF] tabular-nums">
             {onTimeItem.value} طلب
           </span>
@@ -87,7 +87,7 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
   const [range, setRange] = useState<'6m' | 'all'>('all');
 
   const userCompletedCount = useMemo(
-    () => requests.filter((r) => r.status === 'تم إتمام الخدمة').length,
+    () => requests.filter((r) => r.status === 'كملت الخدمة').length,
     [requests]
   );
 
@@ -130,14 +130,14 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-1.5">
             <p className="text-xs font-semibold text-[#0F766E]">
-              مؤشرات الأداء والثقة في صفاقس
+              أرقام النشاط والثقة في صفاقس
             </p>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A]">
-              الطلبات المنجزة شهرياً عبر المنصة
+              الطلبات اللي كملت كل شهر في المنصة
             </h2>
             <p className="text-sm text-slate-600 max-w-2xl">
-              متابعة شهرية لتطور عدد الخدمات المكتملة في ولاية صفاقس ونسبة
-              الالتزام بالمواعيد المحددة.
+              متابعة شهرية لتطور عدد الخدمات اللي كملت في ولاية صفاقس ونسبة
+              الالتزام بالمواعيد المتفق عليها.
             </p>
           </div>
 
@@ -153,7 +153,7 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                آخر 6 أشهر
+                آخر 6 شهور
               </button>
               <button
                 type="button"
@@ -164,7 +164,7 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                كامل السنة
+                العام الكل
               </button>
             </div>
 
@@ -179,7 +179,7 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                منحنى نمو
+                منحنى تطوّر
               </button>
               <button
                 type="button"
@@ -203,7 +203,7 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
               <CheckCircle2 className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs text-slate-500">إجمالي الطلبات المنجزة (2026)</p>
+              <p className="text-xs text-slate-500">جملة الطلبات اللي كملت (2026)</p>
               <p className="text-xl font-bold text-[#0F172A] tabular-nums mt-0.5">
                 {totalCompleted.toLocaleString('en-US')} طلب
               </p>
@@ -215,7 +215,7 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
               <TrendingUp className="w-5 h-5" aria-hidden="true" />
             </div>
             <div>
-              <p className="text-xs text-slate-500">إنجاز الشهر الحالي (نوفمبر)</p>
+              <p className="text-xs text-slate-500">إنجاز هالشهر (نوفمبر)</p>
               <p className="text-xl font-bold text-[#0F172A] tabular-nums mt-0.5">
                 {currentMonth.completed} طلب{' '}
                 <span className="text-xs font-semibold text-[#0F766E]">
@@ -247,19 +247,19 @@ export function MonthlyStatsSection({ requests }: MonthlyStatsSectionProps) {
                   className="w-3 h-3 rounded-xs bg-[#0F2547] inline-block"
                   aria-hidden="true"
                 />
-                <span>إجمالي الطلبات المنجزة</span>
+                <span>الطلبات اللي كملت الكل</span>
               </span>
               <span className="inline-flex items-center gap-2">
                 <span
                   className="w-3 h-3 rounded-xs bg-[#0D9488] inline-block"
                   aria-hidden="true"
                 />
-                <span>طلبات منجزة في الموعد</span>
+                <span>طلبات كملت في وقتها</span>
               </span>
             </div>
             {userCompletedCount > 0 && (
               <span className="text-[#0F766E] font-medium tabular-nums">
-                يشمل {userCompletedCount} خدمة قمت بإتمامها
+                بالحساب متاع {userCompletedCount} خدمة كملتها إنت
               </span>
             )}
           </div>

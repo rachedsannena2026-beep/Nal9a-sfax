@@ -13,9 +13,9 @@ export type SortOption = 'rating' | 'price-asc' | 'fast';
 export type PaymentMethod = 'cash' | 'card' | 'd17' | 'bank';
 
 export type PaymentStatus =
-  | 'الدفع عند الإنجاز'
-  | 'تم الدفع إلكترونياً'
-  | 'بانتظار التحويل';
+  | 'الخلاص وقت الإنجاز'
+  | 'تخلّصت أونلاين'
+  | 'يستنّى في التحويل';
 
 export interface ServiceReview {
   id: string;
@@ -60,7 +60,7 @@ export interface BookingRequest {
   preferredDate: string;
   notes: string;
   createdAt: string;
-  status: 'قيد المراجعة' | 'تم تأكيد الموعد' | 'تم إتمام الخدمة';
+  status: 'في المراجعة' | 'تأكّد الموعد' | 'كملت الخدمة';
   paymentMethod: PaymentMethod;
   paymentMethodLabel: string;
   paymentStatus: PaymentStatus;
@@ -68,4 +68,12 @@ export interface BookingRequest {
   userRating?: number;
   userReview?: string;
   reviewedAt?: string;
+}
+
+export interface RecentSearchItem {
+  id: string;
+  query: string;
+  category: ServiceCategory;
+  city: string;
+  label: string;
 }

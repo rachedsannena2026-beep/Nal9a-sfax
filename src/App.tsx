@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AddServiceSection } from './components/AddServiceSection';
+import { AnnouncementBanner } from './components/AnnouncementBanner';
 import { CategoryIcon } from './components/CategoryIcon';
 import { FaqSection } from './components/FaqSection';
 import { Footer } from './components/Footer';
@@ -7,9 +8,10 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { MonthlyStatsSection } from './components/MonthlyStatsSection';
 import { PaymentSection } from './components/PaymentSection';
-import { RequestsDrawer } from './components/RequestsDrawer';
+import { RequestsDrawer, SideDrawerTab } from './components/RequestsDrawer';
 import { ServiceCard } from './components/ServiceCard';
 import { ServiceModal } from './components/ServiceModal';
+import { ToastContainer, ToastNotification } from './components/ToastContainer';
 import {
   CATEGORY_OPTIONS,
   INITIAL_SERVICES,
@@ -17,15 +19,51 @@ import {
 } from './data/services';
 import {
   BookingRequest,
+  RecentSearchItem,
   ServiceCategory,
   ServiceItem,
   ServiceReview,
   SortOption,
 } from './types/service';
 
-const STORAGE_SERVICES_KEY = 'winnal9a_sfax_services_v1';
-const STORAGE_REQUESTS_KEY = 'winnal9a_sfax_requests_v2';
-const STORAGE_REVIEWS_KEY = 'winnal9a_sfax_reviews_v1';
+const STORAGE_SERVICES_KEY = 'winnal9a_sfax_services_v2';
+const STORAGE_REQUESTS_KEY = 'winnal9a_sfax_requests_v3';
+const STORAGE_REVIEWS_KEY = 'winnal9a_sfax_reviews_v2';
+const STORAGE_FAVORITES_KEY = 'winnal9a_sfax_favorites_v1';
+const STORAGE_RECENT_SEARCHES_KEY = 'winnal9a_sfax_recent_searches_v1';
+
+const DARIJA_STOPWORDS = new Set([
+  'نحب',
+  'لوج',
+  'لوجلي',
+  'ابحث',
+  'على',
+  'في',
+  'من',
+  'مع',
+  'عن',
+  'عندي',
+  'خدمه',
+  'متاع',
+  'تاع',
+  'بجاه',
+  'عافاك',
+  'توا',
+  'شكون',
+  'يعمل',
+  'يصلح',
+  'صفاقس',
+]);
+
+function normalizeArabicText(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[\u064B-\u065F]/g, '')
+    .replace(/[أإآ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي')
+    .trim();
+}
 
 export default function App() {
   const [customServices, setCustomServices] = useState<ServiceItem[]>(() => {
@@ -59,14 +97,61 @@ export default function App() {
     }
   });
 
+  const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_FAVORITES_KEY);
+      if (!saved) return [];
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed)
+        ? parsed.filter((id): id is string => typeof id === 'string')
+        : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const [recentSearches, setRecentSearches] = useState<RecentSearchItem[]>(
+    () => {
+      try {
+        const saved = localStorage.getItem(STORAGE_RECENT_SEARCHES_KEY);
+        if (!saved) return [];
+        const parsed = JSON.parse(saved);
+        return Array.isArray(parsed)
+          ? (parsed as RecentSearchItem[]).slice(0, 6)
+          : [];
+      } catch {
+        return [];
+      }
+    }
+  );
+
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] =
     useState<ServiceCategory>('all');
-  const [selectedCity, setSelectedCity] = useState('كل مناطق صفاقس');
+  const [selectedCity, setSelectedCity] = useState('مناطق صفاقس الكل');
   const [sortBy, setSortBy] = useState<SortOption>('rating');
 
   const [activeServiceId, setActiveServiceId] = useState<string | null>(null);
-  const [isRequestsOpen, setIsRequestsOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [drawerTab, setDrawerTab] = useState<SideDrawerTab>('requests');
+  const [toasts, setToasts] = useState<ToastNotification[]>([]);
+
+  const requestsRef = useRef<BookingRequest[]>(requests);
+  const acceptanceTimersRef = useRef<Record<string, number>>({});
+  const notifiedAcceptIdsRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    requestsRef.current = requests;
+  }, [requests]);
+
+  useEffect(() => {
+    return () => {
+      Object.values(acceptanceTimersRef.current).forEach((timerId) => {
+        window.clearTimeout(timerId);
+      });
+      acceptanceTimersRef.current = {};
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -95,6 +180,25 @@ export default function App() {
     }
   }, [userReviews]);
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_FAVORITES_KEY, JSON.stringify(favoriteIds));
+    } catch {
+      // Ignore storage quota errors cleanly
+    }
+  }, [favoriteIds]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        STORAGE_RECENT_SEARCHES_KEY,
+        JSON.stringify(recentSearches)
+      );
+    } catch {
+      // Ignore storage quota errors cleanly
+    }
+  }, [recentSearches]);
+
   const allServices = useMemo(() => {
     const baseList = [...customServices, ...INITIAL_SERVICES];
     return baseList.map((service) => {
@@ -120,21 +224,38 @@ export default function App() {
     [allServices, activeServiceId]
   );
 
+  const favoriteServices = useMemo(() => {
+    const mapById = new Map(allServices.map((s) => [s.id, s]));
+    return favoriteIds
+      .map((id) => mapById.get(id))
+      .filter((item): item is ServiceItem => Boolean(item));
+  }, [allServices, favoriteIds]);
+
   const filteredServices = useMemo(() => {
-    const query = searchQuery.trim().toLowerCase();
+    const rawQuery = searchQuery.trim();
+    const normalizedQuery = normalizeArabicText(rawQuery);
+    const tokens = normalizedQuery
+      .split(/\s+/)
+      .filter((word) => word.length > 1 && !DARIJA_STOPWORDS.has(word));
 
     const matches = allServices.filter((service) => {
       const categoryMatch =
         selectedCategory === 'all' || service.category === selectedCategory;
       const cityMatch =
-        selectedCity === 'كل مناطق صفاقس' || service.city === selectedCity;
+        selectedCity === 'مناطق صفاقس الكل' || service.city === selectedCity;
+
+      if (normalizedQuery === '') {
+        return categoryMatch && cityMatch;
+      }
+
+      const combinedText = normalizeArabicText(
+        `${service.title} ${service.description} ${service.providerName} ${service.categoryLabel} ${service.city}`
+      );
+
       const queryMatch =
-        query === '' ||
-        service.title.toLowerCase().includes(query) ||
-        service.description.toLowerCase().includes(query) ||
-        service.providerName.toLowerCase().includes(query) ||
-        service.categoryLabel.toLowerCase().includes(query) ||
-        service.city.toLowerCase().includes(query);
+        combinedText.includes(normalizedQuery) ||
+        (tokens.length > 0 &&
+          tokens.every((token) => combinedText.includes(token)));
 
       return categoryMatch && cityMatch && queryMatch;
     });
@@ -152,6 +273,69 @@ export default function App() {
       ?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleSubmitHeroSearch = (queryOverride?: string) => {
+    const effectiveQuery = (queryOverride ?? searchQuery).trim();
+    const hasCustomCategory = selectedCategory !== 'all';
+    const hasCustomCity = selectedCity !== 'مناطق صفاقس الكل';
+
+    if (effectiveQuery !== '' || hasCustomCategory || hasCustomCity) {
+      const categoryLabel =
+        CATEGORY_OPTIONS.find((c) => c.id === selectedCategory)?.label || '';
+
+      let label = effectiveQuery;
+      if (label && hasCustomCity) {
+        label = `${label} · ${selectedCity}`;
+      } else if (label && hasCustomCategory) {
+        label = `${label} · ${categoryLabel}`;
+      } else if (!label && hasCustomCategory && hasCustomCity) {
+        label = `${categoryLabel} · ${selectedCity}`;
+      } else if (!label && hasCustomCategory) {
+        label = categoryLabel;
+      } else if (!label && hasCustomCity) {
+        label = selectedCity;
+      }
+
+      const normalizedKey = `${normalizeArabicText(effectiveQuery)}|${selectedCategory}|${selectedCity}`;
+      const newEntry: RecentSearchItem = {
+        id: `srch-${Date.now()}`,
+        query: effectiveQuery,
+        category: selectedCategory,
+        city: selectedCity,
+        label,
+      };
+
+      setRecentSearches((prev) => {
+        const filtered = prev.filter(
+          (item) =>
+            `${normalizeArabicText(item.query)}|${item.category}|${item.city}` !==
+            normalizedKey
+        );
+        return [newEntry, ...filtered].slice(0, 6);
+      });
+    }
+
+    handleScrollToDirectory();
+  };
+
+  const handleSelectRecentSearch = (item: RecentSearchItem) => {
+    setSearchQuery(item.query);
+    setSelectedCategory(item.category);
+    setSelectedCity(item.city);
+    setRecentSearches((prev) => [
+      item,
+      ...prev.filter((entry) => entry.id !== item.id),
+    ]);
+    handleScrollToDirectory();
+  };
+
+  const handleRemoveRecentSearch = (id: string) => {
+    setRecentSearches((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleClearRecentSearches = () => {
+    setRecentSearches([]);
+  };
+
   const handleJumpToAddService = () => {
     document
       .getElementById('add-service')
@@ -167,23 +351,106 @@ export default function App() {
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedCategory('all');
-    setSelectedCity('كل مناطق صفاقس');
+    setSelectedCity('مناطق صفاقس الكل');
     setSortBy('rating');
   };
 
+  const dismissToast = useCallback((id: string) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  const pushToast = useCallback(
+    (toast: Omit<ToastNotification, 'id'>) => {
+      const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      setToasts((prev) => [...prev.slice(-2), { ...toast, id }]);
+    },
+    []
+  );
+
+  const openDrawer = useCallback((tab: SideDrawerTab) => {
+    setDrawerTab(tab);
+    setIsDrawerOpen(true);
+  }, []);
+
+  const handleAcceptRequest = useCallback(
+    (id: string) => {
+      const pendingTimer = acceptanceTimersRef.current[id];
+      if (pendingTimer) {
+        window.clearTimeout(pendingTimer);
+        delete acceptanceTimersRef.current[id];
+      }
+
+      const target = requestsRef.current.find((r) => r.id === id);
+      if (!target || target.status !== 'في المراجعة') return;
+
+      setRequests((prev) =>
+        prev.map((r) =>
+          r.id === id && r.status === 'في المراجعة'
+            ? { ...r, status: 'تأكّد الموعد' }
+            : r
+        )
+      );
+
+      if (!notifiedAcceptIdsRef.current.has(id)) {
+        notifiedAcceptIdsRef.current.add(id);
+        pushToast({
+          variant: 'accepted',
+          title: `مزود الخدمة قبل طلبك (#${target.referenceCode})`,
+          message: `${target.providerName} أكّد موعد «${target.serviceTitle}» نهار ${target.preferredDate} في ${target.city}.`,
+          actionLabel: 'شوف التفاصيل',
+          onAction: () => openDrawer('requests'),
+        });
+      }
+    },
+    [openDrawer, pushToast]
+  );
+
   const handleCreateBooking = (booking: BookingRequest) => {
     setRequests((prev) => [booking, ...prev]);
+
+    pushToast({
+      variant: 'booking',
+      title: `تم تسجيل الحجز بنجاح (#${booking.referenceCode})`,
+      message: `طلبك لـ «${booking.serviceTitle}» وصل لـ ${booking.providerName}. باش يأكد معاك الموعد قريب.`,
+      actionLabel: 'شوف في طلباتي',
+      onAction: () => openDrawer('requests'),
+    });
+
+    // Simulate real-time provider acceptance notification shortly after booking
+    acceptanceTimersRef.current[booking.id] = window.setTimeout(() => {
+      handleAcceptRequest(booking.id);
+    }, 5000);
+  };
+
+  const handleToggleFavorite = (serviceId: string) => {
+    setFavoriteIds((prev) =>
+      prev.includes(serviceId)
+        ? prev.filter((id) => id !== serviceId)
+        : [serviceId, ...prev]
+    );
+  };
+
+  const handleClearFavorites = () => {
+    setFavoriteIds([]);
   };
 
   const handleRemoveRequest = (id: string) => {
+    const pendingTimer = acceptanceTimersRef.current[id];
+    if (pendingTimer) {
+      window.clearTimeout(pendingTimer);
+      delete acceptanceTimersRef.current[id];
+    }
     setRequests((prev) => prev.filter((r) => r.id !== id));
   };
 
   const handleCompleteRequest = (id: string) => {
+    const pendingTimer = acceptanceTimersRef.current[id];
+    if (pendingTimer) {
+      window.clearTimeout(pendingTimer);
+      delete acceptanceTimersRef.current[id];
+    }
     setRequests((prev) =>
-      prev.map((r) =>
-        r.id === id ? { ...r, status: 'تم إتمام الخدمة' } : r
-      )
+      prev.map((r) => (r.id === id ? { ...r, status: 'كملت الخدمة' } : r))
     );
   };
 
@@ -212,7 +479,7 @@ export default function App() {
       rating,
       comment:
         comment ||
-        `تم تقييم الخدمة بـ ${rating} من 5 نجوم بعد إتمام الطلب بنجاح.`,
+        `تقيّمت الخدمة بـ ${rating} من 5 نجوم بعد ما كملت بنجاح.`,
       date: todayLabel,
     };
 
@@ -241,7 +508,7 @@ export default function App() {
   const handleAddService = (newService: ServiceItem) => {
     setCustomServices((prev) => [newService, ...prev]);
     setSelectedCategory('all');
-    setSelectedCity('كل مناطق صفاقس');
+    setSelectedCity('مناطق صفاقس الكل');
     setSearchQuery('');
   };
 
@@ -256,7 +523,7 @@ export default function App() {
   }) => {
     const paymentRef = `PAY-${Math.floor(100000 + Math.random() * 900000)}`;
     const methodLabel =
-      method === 'd17' ? 'محفظة D17 أو Flouci' : 'بطاقة بنكية (CIB / Visa)';
+      method === 'd17' ? 'D17 ولا Flouci' : 'كارطة بنكية (CIB / Visa)';
 
     setRequests((prev) =>
       prev.map((req) =>
@@ -265,7 +532,7 @@ export default function App() {
               ...req,
               paymentMethod: method,
               paymentMethodLabel: methodLabel,
-              paymentStatus: 'تم الدفع إلكترونياً',
+              paymentStatus: 'تخلّصت أونلاين',
               paymentRef,
             }
           : req
@@ -277,9 +544,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-marketplace-canvas text-slate-900 overflow-x-hidden">
+      <AnnouncementBanner />
+
       <Header
         requestsCount={requests.length}
-        onOpenRequests={() => setIsRequestsOpen(true)}
+        favoritesCount={favoriteServices.length}
+        onOpenRequests={() => openDrawer('requests')}
+        onOpenFavorites={() => openDrawer('favorites')}
         onJumpToAddService={handleJumpToAddService}
       />
 
@@ -288,10 +559,14 @@ export default function App() {
           searchQuery={searchQuery}
           selectedCategory={selectedCategory}
           selectedCity={selectedCity}
+          recentSearches={recentSearches}
           onSearchChange={setSearchQuery}
           onCategoryChange={setSelectedCategory}
           onCityChange={setSelectedCity}
-          onSubmitSearch={handleScrollToDirectory}
+          onSubmitSearch={handleSubmitHeroSearch}
+          onSelectRecentSearch={handleSelectRecentSearch}
+          onRemoveRecentSearch={handleRemoveRecentSearch}
+          onClearRecentSearches={handleClearRecentSearches}
           totalServicesCount={allServices.length}
         />
 
@@ -303,20 +578,20 @@ export default function App() {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div className="space-y-1">
               <p className="text-xs font-semibold text-[#0F766E]">
-                مقدمو خدمات معتمدون
+                حرفيون ومختصون ثقة
               </p>
               <h2 className="text-2xl sm:text-3xl font-bold text-[#0F172A]">
-                دليل الخدمات المتاحة في صفاقس
+                دليل الخدمات الموجودة في صفاقس
               </h2>
               <p className="text-sm text-slate-600 tabular-nums">
-                عرض {filteredServices.length} من أصل {allServices.length} خدمة
+                يعرض {filteredServices.length} من جملة {allServices.length} خدمة
                 موثوقة
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-3">
               <label className="flex items-center gap-2 text-xs text-slate-600">
-                <span>المنطقة:</span>
+                <span>الجهة:</span>
                 <select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
@@ -331,15 +606,15 @@ export default function App() {
               </label>
 
               <label className="flex items-center gap-2 text-xs text-slate-600">
-                <span>ترتيب حسب:</span>
+                <span>رتّب حسب:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
                   className="h-10 px-3 bg-white border border-slate-200 rounded-xl text-xs font-medium text-slate-800 shadow-2xs focus:outline-none focus:border-[#0D9488] cursor-pointer"
                 >
-                  <option value="rating">الأعلى تقييماً</option>
-                  <option value="price-asc">الأقل سعراً</option>
-                  <option value="fast">الأسرع استجابة</option>
+                  <option value="rating">الأعلى تقييم</option>
+                  <option value="price-asc">الأرخص سوم</option>
+                  <option value="fast">الأسرع في الرد</option>
                 </select>
               </label>
             </div>
@@ -383,18 +658,18 @@ export default function App() {
           {filteredServices.length === 0 ? (
             <div className="card-premium rounded-2xl p-12 text-center space-y-3">
               <p className="text-base font-semibold text-slate-900">
-                لا توجد خدمات مطابقة لخيارات البحث الحالية
+                ما لقيناش خدمات تطابق البحث متاعك توا
               </p>
               <p className="text-sm text-slate-500">
-                جرّب تغيير الكلمات المفتاحية أو اختيار &laquo;كل مناطق صفاقس&raquo;
-                لعرض المزيد من المزودين.
+                جرّب بدّل الكلمات اللي كتبتها ولا اختار &laquo;مناطق صفاقس
+                الكل&raquo; باش يطلعولك أكثر مزودين.
               </p>
               <button
                 type="button"
                 onClick={handleResetFilters}
                 className="mt-2 px-5 py-2.5 min-h-[44px] bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer"
               >
-                إعادة ضبط البحث
+                رجّع البحث من جديد
               </button>
             </div>
           ) : (
@@ -403,6 +678,8 @@ export default function App() {
                 <ServiceCard
                   key={service.id}
                   service={service}
+                  isFavorite={favoriteIds.includes(service.id)}
+                  onToggleFavorite={handleToggleFavorite}
                   onSelect={(item) => setActiveServiceId(item.id)}
                 />
               ))}
@@ -430,21 +707,32 @@ export default function App() {
       {activeService && (
         <ServiceModal
           service={activeService}
+          isFavorite={favoriteIds.includes(activeService.id)}
+          onToggleFavorite={handleToggleFavorite}
           onClose={() => setActiveServiceId(null)}
           onCreateBooking={handleCreateBooking}
-          onOpenRequests={() => setIsRequestsOpen(true)}
+          onOpenRequests={() => openDrawer('requests')}
         />
       )}
 
       <RequestsDrawer
-        isOpen={isRequestsOpen}
+        isOpen={isDrawerOpen}
+        activeTab={drawerTab}
+        onTabChange={setDrawerTab}
         requests={requests}
-        onClose={() => setIsRequestsOpen(false)}
+        favoriteServices={favoriteServices}
+        onClose={() => setIsDrawerOpen(false)}
         onRemoveRequest={handleRemoveRequest}
+        onAcceptRequest={handleAcceptRequest}
         onCompleteRequest={handleCompleteRequest}
         onSubmitReview={handleSubmitReview}
+        onToggleFavorite={handleToggleFavorite}
+        onClearFavorites={handleClearFavorites}
+        onSelectService={(serviceId) => setActiveServiceId(serviceId)}
         onJumpToPayment={handleJumpToPayment}
       />
+
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
     </div>
   );
 }

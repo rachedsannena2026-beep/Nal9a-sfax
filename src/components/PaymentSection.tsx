@@ -24,7 +24,7 @@ export function PaymentSection({
   onSettlePayment,
 }: PaymentSectionProps) {
   const unpaidRequests = requests.filter(
-    (r) => r.paymentStatus !== 'تم الدفع إلكترونياً'
+    (r) => r.paymentStatus !== 'تخلّصت أونلاين'
   );
 
   const [selectedRef, setSelectedRef] = useState('');
@@ -59,25 +59,25 @@ export function PaymentSection({
     const parsedAmount = Number(amount);
 
     if (targetRef.length < 4) {
-      setErrorMsg('يرجى إدخال رقم المرجع أو اختيار حجز من القائمة.');
+      setErrorMsg('عافاك حط نومرو المرجع ولا اختار حجز من القائمة.');
       return;
     }
 
     if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
-      setErrorMsg('يرجى إدخال مبلغ صحيح أكبر من صفر.');
+      setErrorMsg('عافاك اكتب مبلغ صحيح أكبر من صفر.');
       return;
     }
 
     if (method === 'd17') {
       const cleaned = walletPhone.replace(/\s+/g, '');
       if (!/^\d{8}$/.test(cleaned)) {
-        setErrorMsg('يرجى إدخال رقم هاتف محفظة D17 / Flouci من 8 أرقام.');
+        setErrorMsg('عافاك اكتب نومرو تليفون D17 / Flouci متاع 8 أرقام.');
         return;
       }
     } else {
       const cleanedCard = cardNumber.replace(/\s+/g, '');
       if (cardHolder.trim().length < 3 || !/^\d{12,16}$/.test(cleanedCard)) {
-        setErrorMsg('يرجى إدخال اسم صاحب البطاقة ورقم البطاقة (12–16 رقماً).');
+        setErrorMsg('عافاك اكتب اسم مولى الكارطة ونومرو الكارطة (12–16 رقم).');
         return;
       }
     }
@@ -99,7 +99,7 @@ export function PaymentSection({
       bookingRef: targetRef,
       amount: parsedAmount,
       methodLabel:
-        method === 'd17' ? 'محفظة D17 / Flouci' : 'بطاقة بنكية (CIB / Visa)',
+        method === 'd17' ? 'D17 ولا Flouci' : 'كارطة بنكية (CIB / Visa)',
     });
 
     setWalletPhone('');
@@ -129,15 +129,15 @@ export function PaymentSection({
         <div className="relative z-10 lg:col-span-6 space-y-6">
           <div className="space-y-2">
             <p className="text-xs font-semibold text-[#2DD4BF] tracking-wide">
-              الدفع والمعاملات المالية
+              الخلاص والمعاملات المالية
             </p>
             <h2 className="text-2xl sm:text-3xl font-bold text-white leading-snug">
-              خيارات دفع مرنة وآمنة لخدمات ولاية صفاقس
+              طرق خلاص ساهلة وآمنة لخدمات ولاية صفاقس
             </h2>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              سواء كنت تفضل الدفع النقدي المباشر عند إتمام الخدمة أو التسوية
-              الإلكترونية السريعة، نوفر لك وسائل الدفع المعتمدة في تونس دون أي
-              عمولة إضافية على العميل.
+              تحب تخلّص كاش وقت تكمل الخدمة ولا أونلاين بالفيسع، نوفرولك
+              طرق الخلاص المعتمدة الكل في تونس من غير حتى مليم عمولة زايدة على
+              الحريف.
             </p>
           </div>
 
@@ -147,10 +147,11 @@ export function PaymentSection({
                 <Banknote className="w-5 h-5" aria-hidden="true" />
               </div>
               <h3 className="text-sm font-semibold text-white">
-                نقداً عند الإنجاز
+                كاش وقت تكمل الخدمة
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                ادفع مباشرة للحرفي أو المزود بعد معاينة العمل والتأكد من الجودة.
+                خلّص الحرفي ولا المزود ديركت بعد ما تشوف الخدمة وتتثبت من
+                الجودة.
               </p>
             </div>
 
@@ -162,7 +163,8 @@ export function PaymentSection({
                 محفظة D17 و Flouci
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                دفع فوري عبر الهاتف الجوال مع إشعار تأكيد مباشر لرقم الحجز.
+                خلاص في الحين بالتليفون مع ميساج تأكيد ديركت لنومرو الحجز
+                متاعك.
               </p>
             </div>
 
@@ -171,10 +173,10 @@ export function PaymentSection({
                 <CreditCard className="w-5 h-5" aria-hidden="true" />
               </div>
               <h3 className="text-sm font-semibold text-white">
-                البطاقات البنكية التونسية
+                الكارطات البنكية التونسية
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                دعم كامل لبطاقات CIB وVisa وMastercard لتسوية المستحقات بأمان.
+                يقبل كارطات CIB وVisa وMastercard باش تخلّص مستحقاتك بأمان.
               </p>
             </div>
 
@@ -183,10 +185,10 @@ export function PaymentSection({
                 <Building2 className="w-5 h-5" aria-hidden="true" />
               </div>
               <h3 className="text-sm font-semibold text-white">
-                تحويل بنكي للمؤسسات
+                تحويل بنكي للشركات
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                خيار التحويل عبر RIB للمشاريع والشركات مع وصل وفاتورة نظامية.
+                تحويل عبر RIB للمشاريع والشركات مع وصل وفاتورة رسمية.
               </p>
             </div>
           </div>
@@ -197,10 +199,10 @@ export function PaymentSection({
           <div className="flex items-center justify-between gap-3 pb-4 border-b border-slate-200">
             <div>
               <h3 className="text-lg font-bold text-[#0F172A]">
-                بوابة الدفع السريع لحجوزاتك
+                بوابة الخلاص السريع لحجوزاتك
               </h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                سدد قيمة أي خدمة محجوزة أو فاتورة متفق عليها برقم المرجع
+                خلّص سوم أي خدمة حجزتها ولا فاتورة متفاهمين عليها بنومرو المرجع
               </p>
             </div>
             <div className="w-9 h-9 rounded-lg bg-[#F8FAFC] border border-slate-200 flex items-center justify-center text-[#0F766E] shrink-0">
@@ -214,17 +216,17 @@ export function PaymentSection({
                 <CheckCircle2 className="w-6 h-6 text-[#0D9488] shrink-0 mt-0.5" />
                 <div>
                   <h4 className="text-base font-bold text-slate-900">
-                    تم تأكيد الدفع بنجاح
+                    تعدّى الخلاص بنجاح
                   </h4>
                   <p className="text-sm text-slate-600 mt-0.5">
-                    تم تسجيل المعاملة وتحديث حالة الحجز المرتبط بها.
+                    العملية تسجّلت وتبدّلت حالة الحجز متاعك أوتوماتيكياً.
                   </p>
                 </div>
               </div>
 
               <div className="bg-[#F8FAFC] border border-slate-200 rounded-xl p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
-                  <span className="text-slate-500">رقم وصل الدفع</span>
+                  <span className="text-slate-500">نومرو وصل الخلاص</span>
                   <span
                     dir="ltr"
                     className="font-mono-num font-semibold text-[#0F766E]"
@@ -239,12 +241,12 @@ export function PaymentSection({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-500">طريقة الدفع</span>
+                  <span className="text-slate-500">طريقة الخلاص</span>
                   <span className="text-slate-900">{receipt.methodLabel}</span>
                 </div>
                 <div className="flex justify-between border-t border-slate-200 pt-2">
                   <span className="font-semibold text-slate-900">
-                    المبلغ المدفوع
+                    المبلغ اللي تخلّص
                   </span>
                   <span className="font-bold text-slate-900 tabular-nums">
                     {receipt.amount} د.ت
@@ -257,7 +259,7 @@ export function PaymentSection({
                 onClick={() => setReceipt(null)}
                 className="w-full py-2.5 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer"
               >
-                إجراء عملية دفع أخرى
+                اعمل عملية خلاص أخرى
               </button>
             </div>
           ) : (
@@ -274,14 +276,14 @@ export function PaymentSection({
               {unpaidRequests.length > 0 && (
                 <label className="block space-y-1.5">
                   <span className="text-xs font-medium text-slate-700">
-                    اختر من طلباتك غير المدفوعة (اختياري)
+                    اختار من طلباتك اللي مازالت ما تخلّصتش (اختياري)
                   </span>
                   <select
                     value={selectedRef}
                     onChange={(e) => handleSelectRequest(e.target.value)}
                     className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-800 focus:bg-white focus:outline-none focus:border-[#0D9488]"
                   >
-                    <option value="">-- أدخل رقم المرجع يدوياً --</option>
+                    <option value="">-- اكتب نومرو المرجع بيدك --</option>
                     {unpaidRequests.map((req) => (
                       <option key={req.id} value={req.referenceCode}>
                         #{req.referenceCode} — {req.serviceTitle} (
@@ -329,7 +331,7 @@ export function PaymentSection({
               {/* Segmented Electronic Method Switch */}
               <div className="space-y-1.5">
                 <span className="block text-xs font-medium text-slate-700">
-                  وسيلة الدفع الإلكتروني
+                  كيفاش تحب تخلّص أونلاين؟
                 </span>
                 <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
                   <button
@@ -354,7 +356,7 @@ export function PaymentSection({
                     }`}
                   >
                     <CreditCard className="w-3.5 h-3.5 text-[#0F766E]" aria-hidden="true" />
-                    <span>بطاقة بنكية</span>
+                    <span>كارطة بنكية</span>
                   </button>
                 </div>
               </div>
@@ -362,7 +364,7 @@ export function PaymentSection({
               {method === 'd17' ? (
                 <label className="block space-y-1.5">
                   <span className="text-xs font-medium text-slate-700">
-                    رقم الهاتف المرتبط بمحفظة D17 / Flouci
+                    نومرو التليفون المربوط بـ D17 / Flouci
                   </span>
                   <input
                     type="tel"
@@ -378,20 +380,20 @@ export function PaymentSection({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <label className="block space-y-1.5">
                     <span className="text-xs font-medium text-slate-700">
-                      اسم حامل البطاقة
+                      اسم مولى الكارطة
                     </span>
                     <input
                       type="text"
                       required
                       value={cardHolder}
                       onChange={(e) => setCardHolder(e.target.value)}
-                      placeholder="الاسم كما على البطاقة"
+                      placeholder="الاسم كيما في الكارطة"
                       className="w-full h-11 px-3 bg-[#F8FAFC] border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-none focus:border-[#0D9488]"
                     />
                   </label>
                   <label className="block space-y-1.5">
                     <span className="text-xs font-medium text-slate-700">
-                      رقم البطاقة البنكية
+                      نومرو الكارطة البنكية
                     </span>
                     <input
                       type="text"
@@ -407,9 +409,9 @@ export function PaymentSection({
               )}
 
               <div className="pt-1 flex items-center justify-between text-xs text-slate-500">
-                <span>عمولة المنصة على العميل: 0 د.ت</span>
+                <span>عمولة المنصة على الحريف: 0 د.ت</span>
                 <span className="font-semibold text-[#0F172A] tabular-nums">
-                  الإجمالي: {Number(amount) > 0 ? amount : 0} د.ت
+                  المجموع: {Number(amount) > 0 ? amount : 0} د.ت
                 </span>
               </div>
 
@@ -417,7 +419,7 @@ export function PaymentSection({
                 type="submit"
                 className="w-full py-3 min-h-[44px] px-4 bg-[#0F2547] hover:bg-[#173666] text-white text-sm font-semibold rounded-xl shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#0D9488]"
               >
-                تأكيد الدفع الإلكتروني
+                أكّد الخلاص أونلاين
               </button>
             </form>
           )}
